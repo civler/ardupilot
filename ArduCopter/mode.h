@@ -135,7 +135,7 @@ protected:
     RC_Channel *&channel_yaw;
     float &G_Dt;
 
-    untitledModelClass QS_InnerRateLoop_Obj;
+    QS_InnerRateLoopModelClass QS_InnerRateLoop_Obj;
     AP_AHRS &QSahrs;
 
     // note that we support two entirely different automatic takeoffs:
@@ -1186,12 +1186,13 @@ public:
     bool init(bool ignore_checks) override;
     void run() override;
 
-    bool requires_GPS() const override { return true; }
-    bool has_manual_throttle() const override { return false; }
+    bool requires_GPS() const override { return false; }
+    bool has_manual_throttle() const override { return true; }
     bool allows_arming(bool from_gcs) const override { return true; };
     bool is_autopilot() const override { return false; }
-    bool logs_attitude() const override { return true; }
+    bool logs_attitude() const override { return false; }
     void set_magnitude(float input) { waveform_magnitude = input; }
+    void set_traj_sw(uint8_t sw_status) { traj_sw = sw_status; }
 
     static const struct AP_Param::GroupInfo var_info[];
 
@@ -1242,6 +1243,32 @@ private:
         SYSTEMID_STATE_STOPPED,
         SYSTEMID_STATE_TESTING
     } systemid_state;
+
+    struct { //quadsquad specific ipnuts
+        int16_t ch1 ;
+        int16_t ch2 ;
+        int16_t ch3 ;
+        int16_t ch4 ;
+        int16_t ch5 ;
+        int16_t ch6 ;
+        int16_t ch7 ;
+        int16_t ch8 ;
+    } GSInputs;
+
+    bool engage; //quadsquad specific
+    float score; //quadsquad specific
+    float VeSqrSum; //quadsquad
+    float PeSqrSum; //quad squad
+    float pNcmd;
+    float pEcmd;
+    float pDcmd;
+    float vmax;
+    float pmax;
+    float trajectorycount;
+    int log_counter_qs;
+    uint8_t traj_sw;
+    float alpha;
+
 };
 
 class ModeThrow : public Mode {
