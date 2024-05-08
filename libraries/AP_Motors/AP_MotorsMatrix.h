@@ -44,6 +44,9 @@ public:
     // output_to_motors - sends minimum values out to the motors
     void                output_to_motors() override;
 
+    // fail motor
+    void                set_fail_motor(uint16_t motor_num) override {_thrust_rpyt_out[motor_num - 1] = 0.0f;};
+
     // get_motor_mask - returns a bitmask of which outputs are being used for motors (1 means being used)
     //  this can be used to ensure other pwm outputs (i.e. for servos) do not conflict
     uint16_t            get_motor_mask() override;

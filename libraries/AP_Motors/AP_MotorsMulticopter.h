@@ -93,6 +93,9 @@ public:
         _thrust_compensation_callback = callback;
     }
     
+    // set fail motor flag
+    void                set_fail_motor_flag(bool flag) { fail_motor = flag; };
+
     // var_info for holding Parameter information
     static const struct AP_Param::GroupInfo        var_info[];
 
@@ -103,6 +106,9 @@ protected:
 
     // output_to_motors - sends commands to the motors
     virtual void        output_to_motors() = 0;
+
+    // fail motor
+    virtual void        set_fail_motor(uint16_t motor_num) {};
 
     // update the throttle input filter
     virtual void        update_throttle_filter() override;
@@ -175,6 +181,10 @@ protected:
 
     // scaling for booster motor throttle
     AP_Float            _boost_scale;
+
+    // failed motor number
+    AP_Int16            _failed_motor_number;
+    bool                fail_motor;
 
     // motor output variables
     bool                motor_enabled[AP_MOTORS_MAX_NUM_MOTORS];    // true if motor is enabled

@@ -212,6 +212,14 @@ const AP_Param::GroupInfo AP_MotorsMulticopter::var_info[] = {
     // @User: Advanced
     AP_GROUPINFO("SAFE_TIME", 42, AP_MotorsMulticopter, _safe_time, AP_MOTORS_SAFE_TIME_DEFAULT),
 
+    // @Param: FAIL_MTR_NUM
+    // @DisplayName: Motor number to fail when aux switch is set
+    // @Description: Motor number to fail when aux switch is set
+    // @Range: 1 16
+    // @Increment: 1
+    // @User: Advanced
+    AP_GROUPINFO("FAIL_MTR_NUM", 43, AP_MotorsMulticopter, _failed_motor_number, 1),
+
     AP_GROUPEND
 };
 
@@ -249,6 +257,10 @@ void AP_MotorsMulticopter::output()
 
     // apply any thrust compensation for the frame
     thrust_compensation();
+
+    if (fail_motor) {
+        set_fail_motor(_failed_motor_number);
+    }
 
     // convert rpy_thrust values to pwm
     output_to_motors();
