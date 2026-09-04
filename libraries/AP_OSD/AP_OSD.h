@@ -262,6 +262,8 @@ private:
 #if HAL_WITH_ESC_TELEM
     AP_Int8 esc_index;
 #endif
+    // Added 06/15/2026 by Walker Poyner
+    void draw_script();
 
     void draw_altitude(uint8_t x, uint8_t y);
     void draw_bat_volt(uint8_t instance,VoltageType  type,uint8_t x, uint8_t y);
@@ -554,6 +556,18 @@ public:
     AP_Int32 options;
 
 #if OSD_ENABLED
+        //Added 06/10/26 by Walker Poyner to allow scripting access to clear OSD screen and write text to it. || Remove these
+    void scripting_clear();
+    void scripting_write(uint8_t index, uint8_t x, uint8_t y, const char* text);
+    void scripting_commit();
+    // ----------------------------------
+
+    struct LuaOSDItem {
+        uint8_t x, y;
+        char text[32]; 
+    };
+
+
     AP_Int8 rc_channel;
     AP_Int8 sw_method;
 
@@ -674,12 +688,20 @@ public:
     }
 
 private:
-    void osd_thread();
 #if OSD_ENABLED
     void update_osd();
     void update_stats();
     void update_current_screen();
     void next_screen();
+
+    //Added by Walker Poyner on 06/15/2026
+    struct LuaOSDItem _lua_items[40];
+    struct LuaOSDItem _lua_buffer[40];
+    uint8_t _lua_item_count = 0;
+    uint8_t _lua_buffer_count = 0;
+    HAL_Semaphore _lua_sem;
+
+    void osd_thread();
 
     //variables for screen switching
     uint8_t current_screen;

@@ -2534,6 +2534,29 @@ void AP_OSD_Screen::draw_rngf(uint8_t x, uint8_t y)
     }
 }
 
+
+// Added 06/11/2026 by Walker Poyner
+void AP_OSD_Screen::draw_script(void)
+{
+    //AP_OSD *osd = AP::osd();
+    if (osd ==nullptr) {
+        return;
+    }
+    if (osd->_lua_items == nullptr)
+    {
+        return;
+    }
+    WITH_SEMAPHORE(osd->_lua_sem);
+
+    for (uint8_t i = 0; i < osd->_lua_item_count; i++) {
+        if (osd->_lua_items[i].text[0] == '\0') {
+            continue; // skip empty items
+        }
+        backend->write(osd->_lua_items[i].x, osd->_lua_items[i].y,false,"%s", osd->_lua_items[i].text);
+    }
+}
+
+
 #define DRAW_SETTING(n) if (n.enabled) draw_ ## n(n.xpos, n.ypos)
 
 #if HAL_WITH_OSD_BITMAP || HAL_WITH_MSP_DISPLAYPORT
@@ -2545,12 +2568,18 @@ void AP_OSD_Screen::draw(void)
     //Note: draw order should be optimized.
     //Big and less important items should be drawn first,
     //so they will not overwrite more important ones.
+
+    //Lua draw added by Walker Poyner on 06/11/2026. This allows users to create custom OSD items using Lua scripting
+    draw_script();
+
 #if HAL_OSD_SIDEBAR_ENABLE
     DRAW_SETTING(sidebars);
 #endif
 
     DRAW_SETTING(message);
-    DRAW_SETTING(horizon);
+    //DRAW_SETTING(horizon);
+    draw_horizon(26, 7);
+    draw_horizon(26, 13);
     DRAW_SETTING(compass);
     DRAW_SETTING(altitude);
 

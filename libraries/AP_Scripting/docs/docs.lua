@@ -3427,7 +3427,7 @@ function networking:get_netmask_active() end
 
 -- desc
 ---@return uint32_t_ud
-function networking:get_ip_active() end
+function networking:get_ip_active() endBef
 
 -- visual odometry object
 --@class visual_odom

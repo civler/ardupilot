@@ -72,8 +72,8 @@ private:
     // setup to match MAX7456 layout
     static const uint8_t char_width = 12;
     static const uint8_t char_height = 18;
-    static const uint8_t video_lines = 16; // PAL
-    static const uint8_t video_cols = 30;
+    static const uint8_t video_lines = 20; // PAL
+    static const uint8_t video_cols = 53;
     static const uint8_t char_spacing = 0;
 
     // scaling factor to make it easier to read
