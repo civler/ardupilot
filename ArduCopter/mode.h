@@ -249,8 +249,10 @@ protected:
     RC_Channel *&channel_throttle;
     RC_Channel *&channel_yaw;
     float &G_Dt;
-
-    QS_InnerRateLoopModelClass QS_InnerRateLoop_Obj;
+ // Matlab 2019 
+  //  QS_InnerRateLoopModelClass QS_InnerRateLoop_Obj;
+  // Matlab 2023
+    QS_InnerRateLoop QS_InnerRateLoop_Obj;
     AP_AHRS &QSahrs;
 
     // note that we support two entirely different automatic takeoffs:
@@ -2018,7 +2020,7 @@ public:
 
     bool requires_GPS() const override { return false; }
     bool has_manual_throttle() const override { return true; }
-    bool allows_arming(AP_Arming::Method method) const override { return true; };
+    bool allows_arming(AP_Arming::Method method) const override { return false; };
     bool is_autopilot() const override { return false; }
     void set_traj_sw(uint8_t sw_status) { traj_sw = sw_status; }
 

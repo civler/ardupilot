@@ -59,7 +59,7 @@ public:
     virtual void        output_to_motors() override;
 
     // fail motor
-    void                set_fail_motor(uint16_t motor_num) override {_thrust_rpyt_out[motor_num - 1] = 0.0f;};
+    void                set_fail_motor(uint16_t motor_num) override {_thrust_rpyt_out[motor_num - 1] = _thrust_rpyt_out[motor_num - 1]*0.3f;};
 
     // get_motor_mask - returns a bitmask of which outputs are being used for motors (1 means being used)
     //  this can be used to ensure other pwm outputs (i.e. for servos) do not conflict
@@ -171,6 +171,6 @@ private:
     bool setup_dodecahexa_matrix(motor_frame_type frame_type);
     bool setup_y6_matrix(motor_frame_type frame_type);
     bool setup_octaquad_matrix(motor_frame_type frame_type);
-
+    void setup_custom_matrix();
     static AP_MotorsMatrix *_singleton;
 };

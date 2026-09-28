@@ -1,15 +1,14 @@
 /*
  * QS_InnerRateLoop.h
  *
- * Student License - for use by students to meet course requirements and
- * perform academic research at degree granting institutions only.  Not
- * for government, commercial, or other organizational use.
+ * Classroom License -- for classroom instructional use only.  Not for
+ * government, commercial, academic research, or other organizational use.
  *
  * Code generation for model "QS_InnerRateLoop".
  *
- * Model version              : 1.539
- * Simulink Coder version : 9.1 (R2019a) 23-Nov-2018
- * C++ source code generated on : Wed Feb  9 13:00:44 2022
+ * Model version              : 10.1
+ * Simulink Coder version : 23.2 (R2023b) 01-Aug-2023
+ * C++ source code generated on : Mon Jun  1 11:15:22 2026
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -20,43 +19,33 @@
 
 #ifndef RTW_HEADER_QS_InnerRateLoop_h_
 #define RTW_HEADER_QS_InnerRateLoop_h_
-#include <math.h>
-#include <string.h>
-#include <stddef.h>
-#ifndef QS_InnerRateLoop_COMMON_INCLUDES_
-# define QS_InnerRateLoop_COMMON_INCLUDES_
 #include "rtwtypes.h"
 #include "rtw_continuous.h"
 #include "rtw_solver.h"
-#endif                                 /* QS_InnerRateLoop_COMMON_INCLUDES_ */
-
 #include "QS_InnerRateLoop_types.h"
-
-/* Shared type includes */
-#include "multiword_types.h"
 
 /* Macros for accessing real-time model data structure */
 #ifndef rtmGetErrorStatus
-# define rtmGetErrorStatus(rtm)        ((rtm)->errorStatus)
+#define rtmGetErrorStatus(rtm)         ((rtm)->errorStatus)
 #endif
 
 #ifndef rtmSetErrorStatus
-# define rtmSetErrorStatus(rtm, val)   ((rtm)->errorStatus = (val))
+#define rtmSetErrorStatus(rtm, val)    ((rtm)->errorStatus = (val))
 #endif
 
 /* Block signals (default storage) */
-typedef struct {
+struct B_QS_InnerRateLoop_T {
   real32_T col;                        /* '<S104>/col' */
   real32_T lon;                        /* '<S98>/lon' */
   real32_T lat;                        /* '<S98>/lat' */
-  real32_T col_h;                      /* '<S98>/col' */
+  real32_T col_i;                      /* '<S98>/col' */
   real32_T ped;                        /* '<S98>/ped' */
   real32_T In1[4];                     /* '<S6>/In1' */
   real32_T Gain;                       /* '<S4>/Gain' */
-} B_QS_InnerRateLoop_T;
+};
 
 /* Block states (default storage) for system '<Root>' */
-typedef struct {
+struct DW_QS_InnerRateLoop_T {
   real_T Delay2_DSTATE;                /* '<S96>/Delay2' */
   real_T DiscreteTimeIntegrator_DSTATE;/* '<S59>/Discrete-Time Integrator' */
   real32_T DiscreteTimeIntegrator_DSTATE_a;/* '<S94>/Discrete-Time Integrator' */
@@ -166,43 +155,43 @@ typedef struct {
   uint8_T DiscreteTimeIntegrator_IC_LOADI;/* '<S69>/Discrete-Time Integrator' */
   uint8_T DiscreteTimeIntegrator1_IC_LOAD;/* '<S69>/Discrete-Time Integrator1' */
   uint8_T DiscreteTimeIntegrator2_IC_LOAD;/* '<S69>/Discrete-Time Integrator2' */
-  uint8_T icLoad;                      /* '<S13>/Delay' */
   uint8_T DiscreteTimeIntegrator_IC_LOA_b;/* '<S13>/Discrete-Time Integrator' */
   uint8_T DiscreteTimeIntegrator_IC_LOA_j;/* '<S21>/Discrete-Time Integrator' */
   uint8_T DiscreteTimeIntegrator_IC_LOA_m;/* '<S20>/Discrete-Time Integrator' */
   uint8_T DiscreteTimeIntegrator1_IC_LO_e;/* '<S18>/Discrete-Time Integrator1' */
-} DW_QS_InnerRateLoop_T;
+  boolean_T icLoad;                    /* '<S13>/Delay' */
+};
 
 /* Invariant block signals (default storage) */
-typedef const struct tag_ConstB_QS_InnerRateLoop_T {
-  real32_T TrigonometricFunction2;     /* '<S9>/Trigonometric Function2' */
-  real32_T TrigonometricFunction5;     /* '<S9>/Trigonometric Function5' */
-  real32_T TrigonometricFunction4;     /* '<S9>/Trigonometric Function4' */
-  real32_T TrigonometricFunction1;     /* '<S9>/Trigonometric Function1' */
+struct ConstB_QS_InnerRateLoop_T {
   real32_T TrigonometricFunction3;     /* '<S8>/Trigonometric Function3' */
   real32_T TrigonometricFunction6;     /* '<S8>/Trigonometric Function6' */
-  real32_T TrigonometricFunction1_g;   /* '<S72>/Trigonometric Function1' */
-  real32_T TrigonometricFunction5_j;   /* '<S72>/Trigonometric Function5' */
-  real32_T TrigonometricFunction4_k;   /* '<S72>/Trigonometric Function4' */
-  real32_T TrigonometricFunction2_a;   /* '<S72>/Trigonometric Function2' */
-  real32_T TrigonometricFunction1_k;   /* '<S103>/Trigonometric Function1' */
-  real32_T TrigonometricFunction5_o;   /* '<S103>/Trigonometric Function5' */
-  real32_T TrigonometricFunction4_n;   /* '<S103>/Trigonometric Function4' */
-  real32_T TrigonometricFunction2_l;   /* '<S103>/Trigonometric Function2' */
-  real32_T TrigonometricFunction4_km;  /* '<S71>/Trigonometric Function4' */
-  real32_T TrigonometricFunction5_f;   /* '<S71>/Trigonometric Function5' */
+  real32_T TrigonometricFunction1;     /* '<S9>/Trigonometric Function1' */
+  real32_T TrigonometricFunction2;     /* '<S9>/Trigonometric Function2' */
+  real32_T TrigonometricFunction4;     /* '<S9>/Trigonometric Function4' */
+  real32_T TrigonometricFunction5;     /* '<S9>/Trigonometric Function5' */
   real32_T TrigonometricFunction1_m;   /* '<S71>/Trigonometric Function1' */
-  real32_T TrigonometricFunction2_ag;  /* '<S71>/Trigonometric Function2' */
-  real32_T Sum2;                       /* '<S12>/Sum2' */
+  real32_T TrigonometricFunction2_a;   /* '<S71>/Trigonometric Function2' */
+  real32_T TrigonometricFunction4_k;   /* '<S71>/Trigonometric Function4' */
+  real32_T TrigonometricFunction5_f;   /* '<S71>/Trigonometric Function5' */
+  real32_T TrigonometricFunction1_g;   /* '<S72>/Trigonometric Function1' */
+  real32_T TrigonometricFunction2_ak;  /* '<S72>/Trigonometric Function2' */
+  real32_T TrigonometricFunction4_km;  /* '<S72>/Trigonometric Function4' */
+  real32_T TrigonometricFunction5_j;   /* '<S72>/Trigonometric Function5' */
+  real32_T TrigonometricFunction1_p;   /* '<S103>/Trigonometric Function1' */
+  real32_T TrigonometricFunction2_i;   /* '<S103>/Trigonometric Function2' */
+  real32_T TrigonometricFunction4_g;   /* '<S103>/Trigonometric Function4' */
+  real32_T TrigonometricFunction5_b;   /* '<S103>/Trigonometric Function5' */
   real32_T Sum1;                       /* '<S12>/Sum1' */
-} ConstB_QS_InnerRateLoop_T;
+  real32_T Sum2;                       /* '<S12>/Sum2' */
+};
 
 /* Constant parameters (default storage) */
-typedef struct {
+struct ConstP_QS_InnerRateLoop_T {
   /* Pooled Parameter (Mixed Expressions)
    * Referenced by:
    *   '<S29>/1-D Lookup Table2'
-   *   '<S55>/1-D Lookup Table2'
+   *   '<S45>/1-D Lookup Table2'
    */
   real32_T pooled6[5];
 
@@ -251,22 +240,22 @@ typedef struct {
    */
   real32_T pooled7[5];
 
-  /* Pooled Parameter (Mixed Expressions)
-   * Referenced by:
-   *   '<S38>/1-D Lookup Table2'
-   *   '<S79>/1-D Lookup Table2'
-   */
-  real32_T pooled8[5];
-
   /* Computed Parameter: uDLookupTable2_tableData
-   * Referenced by: '<S45>/1-D Lookup Table2'
+   * Referenced by: '<S38>/1-D Lookup Table2'
    */
   real32_T uDLookupTable2_tableData[5];
 
-  /* Computed Parameter: uDLookupTable2_tableData_f
-   * Referenced by: '<S83>/1-D Lookup Table2'
+  /* Computed Parameter: uDLookupTable2_tableData_c
+   * Referenced by: '<S55>/1-D Lookup Table2'
    */
-  real32_T uDLookupTable2_tableData_f[5];
+  real32_T uDLookupTable2_tableData_c[5];
+
+  /* Pooled Parameter (Mixed Expressions)
+   * Referenced by:
+   *   '<S79>/1-D Lookup Table2'
+   *   '<S83>/1-D Lookup Table2'
+   */
+  real32_T pooled12[5];
 
   /* Computed Parameter: uDLookupTable2_tableData_e
    * Referenced by: '<S86>/1-D Lookup Table2'
@@ -280,36 +269,36 @@ typedef struct {
    */
   real32_T pooled13[5];
 
-  /* Pooled Parameter (Mixed Expressions)
-   * Referenced by:
-   *   '<S64>/Constant'
-   *   '<S64>/1-D Lookup Table2'
-   */
-  real32_T pooled17[36];
-
   /* Computed Parameter: uDLookupTable2_tableData_g
    * Referenced by: '<S64>/1-D Lookup Table2'
    */
   real32_T uDLookupTable2_tableData_g[180];
 
-  /* Pooled Parameter (Expression: [1:16])
+  /* Pooled Parameter (Mixed Expressions)
    * Referenced by:
-   *   '<S63>/Constant'
-   *   '<S63>/1-D Lookup Table2'
+   *   '<S64>/Constant'
+   *   '<S64>/1-D Lookup Table2'
    */
-  real32_T pooled18[16];
+  real32_T pooled18[36];
 
   /* Computed Parameter: uDLookupTable2_tableData_b
    * Referenced by: '<S63>/1-D Lookup Table2'
    */
   real32_T uDLookupTable2_tableData_b[80];
 
+  /* Pooled Parameter (Expression: [1:16])
+   * Referenced by:
+   *   '<S63>/Constant'
+   *   '<S63>/1-D Lookup Table2'
+   */
+  real32_T pooled19[16];
+
   /* Pooled Parameter (Expression: Klatlon)
    * Referenced by:
    *   '<S89>/1-D Lookup Table2'
    *   '<S92>/1-D Lookup Table2'
    */
-  real32_T pooled20[5];
+  real32_T pooled21[5];
 
   /* Computed Parameter: uDLookupTable2_tableData_k
    * Referenced by: '<S87>/1-D Lookup Table2'
@@ -322,12 +311,12 @@ typedef struct {
    *   '<S12>/1-D Lookup Table2'
    *   '<S12>/1-D Lookup Table3'
    */
-  real32_T pooled26[24];
+  real32_T pooled27[37];
 
   /* Expression: VXdata'
    * Referenced by: '<S12>/1-D Lookup Table'
    */
-  real32_T uDLookupTable_tableData[24];
+  real32_T uDLookupTable_tableData[37];
 
   /* Computed Parameter: uDLookupTable2_tableData_j
    * Referenced by: '<S42>/1-D Lookup Table2'
@@ -354,10 +343,10 @@ typedef struct {
    */
   real32_T uDLookupTable2_tableData_a[5];
 
-  /* Computed Parameter: uDLookupTable2_tableData_fu
+  /* Computed Parameter: uDLookupTable2_tableData_f
    * Referenced by: '<S27>/1-D Lookup Table2'
    */
-  real32_T uDLookupTable2_tableData_fu[5];
+  real32_T uDLookupTable2_tableData_f[5];
 
   /* Computed Parameter: uDLookupTable_tableData_l
    * Referenced by: '<S23>/1-D Lookup Table'
@@ -374,10 +363,10 @@ typedef struct {
    */
   real32_T uDLookupTable2_tableData_ex[5];
 
-  /* Computed Parameter: uDLookupTable2_tableData_c
+  /* Computed Parameter: uDLookupTable2_tableData_cv
    * Referenced by: '<S43>/1-D Lookup Table2'
    */
-  real32_T uDLookupTable2_tableData_c[5];
+  real32_T uDLookupTable2_tableData_cv[5];
 
   /* Computed Parameter: uDLookupTable_tableData_m
    * Referenced by: '<S25>/1-D Lookup Table'
@@ -424,15 +413,19 @@ typedef struct {
    */
   real32_T uDLookupTable1_tableData_m[5];
 
-  /* Computed Parameter: uDLookupTable2_tableData_or
-   * Referenced by: '<S51>/1-D Lookup Table2'
+  /* Pooled Parameter (Mixed Expressions)
+   * Referenced by:
+   *   '<S35>/1-D Lookup Table2'
+   *   '<S51>/1-D Lookup Table2'
    */
-  real32_T uDLookupTable2_tableData_or[5];
+  real32_T pooled40[5];
 
-  /* Computed Parameter: uDLookupTable2_tableData_gp
-   * Referenced by: '<S52>/1-D Lookup Table2'
+  /* Pooled Parameter (Mixed Expressions)
+   * Referenced by:
+   *   '<S36>/1-D Lookup Table2'
+   *   '<S52>/1-D Lookup Table2'
    */
-  real32_T uDLookupTable2_tableData_gp[5];
+  real32_T pooled41[5];
 
   /* Computed Parameter: uDLookupTable2_tableData_n
    * Referenced by: '<S78>/1-D Lookup Table2'
@@ -448,20 +441,10 @@ typedef struct {
    * Referenced by: '<S73>/1-D Lookup Table1'
    */
   real32_T uDLookupTable1_tableData_p[5];
-
-  /* Computed Parameter: uDLookupTable2_tableData_ob
-   * Referenced by: '<S35>/1-D Lookup Table2'
-   */
-  real32_T uDLookupTable2_tableData_ob[5];
-
-  /* Computed Parameter: uDLookupTable2_tableData_l
-   * Referenced by: '<S36>/1-D Lookup Table2'
-   */
-  real32_T uDLookupTable2_tableData_l[5];
-} ConstP_QS_InnerRateLoop_T;
+};
 
 /* External inputs (root inport signals with default storage) */
-typedef struct {
+struct ExtU_QS_InnerRateLoop_T {
   boolean_T engage;                    /* '<Root>/engage' */
   real32_T input_lat;                  /* '<Root>/input_lat' */
   real32_T input_lon;                  /* '<Root>/input_lon' */
@@ -497,10 +480,10 @@ typedef struct {
   real32_T Ax_mpss;                    /* '<Root>/Ax_mpss' */
   real32_T Ay_mpss;                    /* '<Root>/Ay_mpss' */
   real32_T Az_mpss;                    /* '<Root>/Az_mpss' */
-} ExtU_QS_InnerRateLoop_T;
+};
 
 /* External outputs (root outports fed by signals with default storage) */
-typedef struct {
+struct ExtY_QS_InnerRateLoop_T {
   real32_T mixer_throttle;             /* '<Root>/mixer_throttle' */
   real32_T mixer_x;                    /* '<Root>/mixer_x' */
   real32_T mixer_y;                    /* '<Root>/mixer_y' */
@@ -525,7 +508,7 @@ typedef struct {
   boolean_T ScoreOn;                   /* '<Root>/ScoreOn' */
   real32_T CF_Alt;                     /* '<Root>/CF_Alt' */
   real32_T CF_Vz;                      /* '<Root>/CF_Vz' */
-} ExtY_QS_InnerRateLoop_T;
+};
 
 /* Real-time Model Data Structure */
 struct tag_RTM_QS_InnerRateLoop_T {
@@ -538,32 +521,33 @@ extern const ConstB_QS_InnerRateLoop_T QS_InnerRateLoop_ConstB;/* constant block
 extern const ConstP_QS_InnerRateLoop_T QS_InnerRateLoop_ConstP;
 
 /* Class declaration for model QS_InnerRateLoop */
-class QS_InnerRateLoopModelClass {
+class QS_InnerRateLoop
+{
   /* public data and function members */
  public:
+  /* Real-Time Model get method */
+  RT_MODEL_QS_InnerRateLoop_T * getRTM();
+
   /* External inputs */
   ExtU_QS_InnerRateLoop_T QS_InnerRateLoop_U;
 
   /* External outputs */
   ExtY_QS_InnerRateLoop_T QS_InnerRateLoop_Y;
 
-  /* model initialize function */
+  /* Initial conditions function */
   void initialize();
 
   /* model step function */
   void step();
 
   /* model terminate function */
-  void terminate();
+  static void terminate();
 
   /* Constructor */
-  QS_InnerRateLoopModelClass();
+  QS_InnerRateLoop();
 
   /* Destructor */
-  ~QS_InnerRateLoopModelClass();
-
-  /* Real-Time Model get method */
-  RT_MODEL_QS_InnerRateLoop_T * getRTM();
+  ~QS_InnerRateLoop();
 
   /* private data and function members */
  private:

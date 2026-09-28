@@ -415,11 +415,11 @@ void AP_MotorsMatrix::output_armed_stabilizing()
         print -= 1;
     } else {
         print = 2000;
-        if (_thrust_boost) {
-        gcs().send_text(MAV_SEVERITY_INFO, "thrust boost true");
-        } else {
-        gcs().send_text(MAV_SEVERITY_INFO, "thrust boost false");
-        }
+      //  if (_thrust_boost) {
+      //  gcs().send_text(MAV_SEVERITY_INFO, "thrust boost true");
+      //  } else {
+      //  gcs().send_text(MAV_SEVERITY_INFO, "thrust boost false");
+      //  }
     }
 
 }
@@ -862,6 +862,11 @@ bool AP_MotorsMatrix::setup_hexa_matrix(motor_frame_type frame_type)
         add_motors(motors, ARRAY_SIZE(motors));
         break;
     }
+	case MOTOR_FRAME_TYPE_PLUSR: {
+		_frame_type_string = "CW_PLUSR";
+         setup_custom_matrix();
+	}
+            break;
     default:
         // hexa frame class does not support this frame type
         return false;
@@ -1306,6 +1311,7 @@ void AP_MotorsMatrix::setup_motors(motor_frame_class frame_class, motor_frame_ty
         success = setup_deca_matrix(frame_type);
         break;
 #endif //AP_MOTORS_FRAME_DECA_ENABLED
+
     default:
         // matrix doesn't support the configured class
         success = false;
@@ -1382,6 +1388,31 @@ void AP_MotorsMatrix::disable_yaw_torque(void)
     for (uint8_t i = 0; i < AP_MOTORS_MAX_NUM_MOTORS; i++) {
         _yaw_factor[i] = 0;
     }
+}
+
+void AP_MotorsMatrix::setup_custom_matrix()
+{
+
+    // Motor 1: 
+    add_motor_raw(0,  0.0f,  0.76f, -.76f, 1, 0.76f);
+
+    // Motor 2: 
+    add_motor_raw(1, 0.0f , -1.77f , 1.77f, 2,0.22f);
+
+    // Motor 3:
+    add_motor_raw(2, 0.87f,  -0.114f,  -1.38f, 3, 1.38f);
+
+    // Motor 4:
+    add_motor_raw(3, -0.87f,   0.88f,   0.614f, 4, 1.38f);
+	
+	 // Motor 5:
+    add_motor_raw(4, 0.87f,   0.88f,   0.614f, 5, 1.38f);
+	
+	 // Motor 6:
+    add_motor_raw(5, -0.87f,  -0.114f,  -1.38f, 6, 1.38f);
+
+    // Normalizes factors across all defined motors to prevent saturation
+    normalise_rpy_factors();
 }
 
 #if APM_BUILD_TYPE(APM_BUILD_UNKNOWN)

@@ -1,15 +1,14 @@
 /*
  * QS_InnerRateLoop.cpp
  *
- * Student License - for use by students to meet course requirements and
- * perform academic research at degree granting institutions only.  Not
- * for government, commercial, or other organizational use.
+ * Classroom License -- for classroom instructional use only.  Not for
+ * government, commercial, academic research, or other organizational use.
  *
  * Code generation for model "QS_InnerRateLoop".
  *
- * Model version              : 1.539
- * Simulink Coder version : 9.1 (R2019a) 23-Nov-2018
- * C++ source code generated on : Wed Feb  9 13:00:44 2022
+ * Model version              : 10.1
+ * Simulink Coder version : 23.2 (R2023b) 01-Aug-2023
+ * C++ source code generated on : Mon Jun  1 11:15:22 2026
  *
  * Target selection: grt.tlc
  * Note: GRT includes extra infrastructure and instrumentation for prototyping
@@ -19,14 +18,16 @@
  */
 
 #include "QS_InnerRateLoop.h"
+#include <math.h>
+#include "rtwtypes.h"
 #include "QS_InnerRateLoop_private.h"
 
 uint32_T plook_u32ff_evencg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
   maxIndex, real32_T *fraction)
 {
-  uint32_T bpIndex;
-  real32_T invSpc;
   real32_T fbpIndex;
+  real32_T invSpc;
+  uint32_T bpIndex;
 
   /* Prelookup - Index and Fraction
      Index Search method: 'even'
@@ -38,7 +39,8 @@ uint32_T plook_u32ff_evencg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
   fbpIndex = (u - bp0) * invSpc;
   if (fbpIndex < maxIndex) {
     bpIndex = static_cast<uint32_T>(fbpIndex);
-    *fraction = (u - (static_cast<real32_T>(bpIndex) * bpSpace + bp0)) * invSpc;
+    *fraction = (u - (static_cast<real32_T>(static_cast<uint32_T>(fbpIndex)) *
+                      bpSpace + bp0)) * invSpc;
   } else {
     bpIndex = maxIndex - 1U;
     *fraction = 1.0F;
@@ -50,20 +52,21 @@ uint32_T plook_u32ff_evencg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
 real32_T intrp1d_fu32fl_pw(uint32_T bpIndex, real32_T frac, const real32_T
   table[])
 {
+  real32_T yL_0d0;
+
   /* Column-major Interpolation 1-D
      Interpolation method: 'Linear point-slope'
      Use last breakpoint for index at or above upper limit: 'off'
      Overflow mode: 'portable wrapping'
    */
-  return (table[bpIndex + 1U] - table[bpIndex]) * frac + table[bpIndex];
+  yL_0d0 = table[bpIndex];
+  return (table[bpIndex + 1U] - yL_0d0) * frac + yL_0d0;
 }
 
 uint32_T plook_u32ff_evenca(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
   maxIndex, real32_T *fraction)
 {
   uint32_T bpIndex;
-  real32_T invSpc;
-  real32_T fbpIndex;
 
   /* Prelookup - Index and Fraction
      Index Search method: 'even'
@@ -76,12 +79,14 @@ uint32_T plook_u32ff_evenca(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
     bpIndex = 0U;
     *fraction = 0.0F;
   } else {
+    real32_T fbpIndex;
+    real32_T invSpc;
     invSpc = 1.0F / bpSpace;
     fbpIndex = (u - bp0) * invSpc;
     if (fbpIndex < maxIndex) {
       bpIndex = static_cast<uint32_T>(fbpIndex);
-      *fraction = (u - (static_cast<real32_T>(bpIndex) * bpSpace + bp0)) *
-        invSpc;
+      *fraction = (u - (static_cast<real32_T>(static_cast<uint32_T>(fbpIndex)) *
+                        bpSpace + bp0)) * invSpc;
     } else {
       bpIndex = maxIndex;
       *fraction = 0.0F;
@@ -104,7 +109,9 @@ real32_T intrp1d_fu32fla_pw(uint32_T bpIndex, real32_T frac, const real32_T
   if (bpIndex == maxIndex) {
     y = table[bpIndex];
   } else {
-    y = (table[bpIndex + 1U] - table[bpIndex]) * frac + table[bpIndex];
+    real32_T yL_0d0;
+    yL_0d0 = table[bpIndex];
+    y = (table[bpIndex + 1U] - yL_0d0) * frac + yL_0d0;
   }
 
   return y;
@@ -113,9 +120,9 @@ real32_T intrp1d_fu32fla_pw(uint32_T bpIndex, real32_T frac, const real32_T
 uint32_T plook_u32ff_evenxg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
   maxIndex, real32_T *fraction)
 {
-  uint32_T bpIndex;
-  real32_T invSpc;
   real32_T fbpIndex;
+  real32_T invSpc;
+  uint32_T bpIndex;
 
   /* Prelookup - Index and Fraction
      Index Search method: 'even'
@@ -127,10 +134,11 @@ uint32_T plook_u32ff_evenxg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
   fbpIndex = (u - bp0) * invSpc;
   if (fbpIndex < maxIndex) {
     bpIndex = static_cast<uint32_T>(fbpIndex);
-    *fraction = (u - (static_cast<real32_T>(bpIndex) * bpSpace + bp0)) * invSpc;
+    *fraction = (u - (static_cast<real32_T>(static_cast<uint32_T>(fbpIndex)) *
+                      bpSpace + bp0)) * invSpc;
   } else {
     bpIndex = maxIndex - 1U;
-    *fraction = (u - (static_cast<real32_T>((maxIndex - 1U)) * bpSpace + bp0)) *
+    *fraction = (u - (static_cast<real32_T>(maxIndex - 1U) * bpSpace + bp0)) *
       invSpc;
   }
 
@@ -140,9 +148,9 @@ uint32_T plook_u32ff_evenxg(real32_T u, real32_T bp0, real32_T bpSpace, uint32_T
 uint32_T plook_u32ff_bincg(real32_T u, const real32_T bp[], uint32_T maxIndex,
   real32_T *fraction)
 {
+  uint32_T bpIdx;
   uint32_T bpIndex;
   uint32_T iRght;
-  uint32_T bpIdx;
 
   /* Prelookup - Index and Fraction
      Index Search method: 'binary'
@@ -171,7 +179,8 @@ uint32_T plook_u32ff_bincg(real32_T u, const real32_T bp[], uint32_T maxIndex,
 real32_T intrp2d_fu32fl_pw(const uint32_T bpIndex[], const real32_T frac[],
   const real32_T table[], const uint32_T stride)
 {
-  real32_T yL_1d;
+  real32_T yL_0d0;
+  real32_T yL_0d1;
   uint32_T offset_1d;
 
   /* Column-major Interpolation 2-D
@@ -180,126 +189,127 @@ real32_T intrp2d_fu32fl_pw(const uint32_T bpIndex[], const real32_T frac[],
      Overflow mode: 'portable wrapping'
    */
   offset_1d = bpIndex[1U] * stride + bpIndex[0U];
-  yL_1d = (table[offset_1d + 1U] - table[offset_1d]) * frac[0U] +
-    table[offset_1d];
+  yL_0d0 = table[offset_1d];
+  yL_0d0 += (table[offset_1d + 1U] - yL_0d0) * frac[0U];
   offset_1d += stride;
-  return (((table[offset_1d + 1U] - table[offset_1d]) * frac[0U] +
-           table[offset_1d]) - yL_1d) * frac[1U] + yL_1d;
+  yL_0d1 = table[offset_1d];
+  return (((table[offset_1d + 1U] - yL_0d1) * frac[0U] + yL_0d1) - yL_0d0) *
+    frac[1U] + yL_0d0;
 }
 
 /* Model step function */
-void QS_InnerRateLoopModelClass::step()
+void QS_InnerRateLoop::step()
 {
-  int32_T iU;
-  uint32_T bpIdx;
-  uint32_T bpIdx_0;
-  uint32_T bpIndices[2];
-  real32_T fractions[2];
-  uint32_T bpIndices_0[2];
-  real32_T fractions_0[2];
-  real32_T rtb_Saturation1_p;
-  real32_T rtb_uDLookupTable_cs;
-  real32_T rtb_Saturation_h;
-  real32_T rtb_Saturation8;
-  real32_T rtb_Add5_e;
-  real32_T rtb_Add6_i;
-  real32_T rtb_TrigonometricFunction6;
-  real32_T rtb_TrigonometricFunction3;
-  real32_T rtb_TmpSignalConversionAtProduc[9];
-  boolean_T rtb_Compare;
-  real_T rtb_Sum2_h;
-  boolean_T rtb_Compare_ab;
-  boolean_T rtb_Compare_m;
-  boolean_T rtb_Compare_bt;
-  real32_T rtb_Product;
-  real32_T rtb_Product_ng;
-  real32_T rtb_Saturation2_h;
-  real32_T rtb_Product_ee;
-  real32_T rtb_Switch2_cz;
-  real32_T rtb_Product2;
-  real32_T rtb_Gain2;
-  real32_T rtb_Sum4_a;
-  real32_T rtb_uDLookupTable3;
-  real32_T rtb_Sum3_f;
-  real32_T rtb_derivativecutofffrequency_b;
-  real32_T rtb_Sum4_b;
-  real32_T rtb_Add5_ky;
-  real32_T rtb_Add7_d;
-  real32_T rtb_Sum2_k;
-  real32_T rtb_Abs;
-  real32_T rtb_Add6_a;
-  real32_T rtb_Switch_ep;
-  real32_T rtb_Sum_j3;
-  real32_T rtb_Product_of;
-  real32_T rtb_Gain1;
-  real32_T rtb_DiscreteTimeIntegrator1;
-  boolean_T rtb_Compare_nh;
-  real32_T rtb_Switch3;
   real_T rtb_Gain_e;
-  real32_T rtb_Abs_i;
-  real32_T rtb_Sum1_c0;
-  real32_T rtb_Product_ib;
-  real32_T rtb_uDLookupTable1;
-  real32_T rtb_DiscreteTimeIntegrator_hs;
-  real32_T rtb_Sum1_fe;
-  real32_T rtb_Product_jr;
-  real32_T rtb_uDLookupTable;
-  real32_T rtb_uDLookupTable1_p;
-  real32_T rtb_DiscreteTimeIntegrator_cv;
-  real32_T rtb_Saturation_k;
-  real32_T rtb_uDLookupTable2_bw;
-  real32_T rtb_Product_n;
-  real32_T rtb_uDLookupTable1_l;
-  real32_T rtb_DiscreteTimeIntegrator_nt;
-  real32_T rtb_Product_ear;
-  real32_T rtb_DiscreteTimeIntegrator_ia;
-  real32_T rtb_Product_hg[4];
-  real32_T rtb_DeadZone3;
-  real32_T rtb_DiscreteTimeIntegrator_fi;
-  real32_T rtb_uDLookupTable_a;
-  real32_T rtb_DiscreteTimeIntegrator_k1;
-  real32_T rtb_Sum1_lq;
-  real32_T rtb_DiscreteTimeIntegrator_h;
-  real32_T rtb_Sum1_gg;
-  real32_T rtb_DiscreteTimeIntegrator_n;
-  boolean_T rtb_RelationalOperator_b1;
   real_T rtb_Sum;
-  real32_T rtb_DeadZone;
-  real32_T rtb_Abs_k;
-  real32_T rtb_Product_cw;
-  real32_T rtb_Sum1_gw;
+  real_T rtb_Sum2_h;
+  int32_T i;
+  int32_T iU;
+  int32_T tmp;
   real32_T rtb_uDLookupTable2[36];
   real32_T rtb_uDLookupTable2_k5[16];
+  real32_T rtb_Add5_1[9];
+  real32_T rtb_Product_b_0[4];
+  real32_T rtb_Product_j[4];
   real32_T rtb_Sum1_f[4];
-  real32_T rtb_Product_b[4];
-  int32_T i;
-  real32_T tmp;
+  real32_T fractions[2];
+  real32_T fractions_0[2];
+  real32_T rtb_Abs;
+  real32_T rtb_Abs_i;
+  real32_T rtb_Abs_k;
+  real32_T rtb_Add5;
+  real32_T rtb_Add5_e;
+  real32_T rtb_Add5_l;
+  real32_T rtb_Add5_tmp;
+  real32_T rtb_Add6;
+  real32_T rtb_Add6_i;
+  real32_T rtb_Add6_m;
+  real32_T rtb_Add7;
+  real32_T rtb_Add7_f2;
+  real32_T rtb_DeadZone;
+  real32_T rtb_DeadZone3;
+  real32_T rtb_DiscreteTimeIntegrator1;
+  real32_T rtb_DiscreteTimeIntegrator_cv;
+  real32_T rtb_DiscreteTimeIntegrator_h;
+  real32_T rtb_DiscreteTimeIntegrator_hs;
+  real32_T rtb_DiscreteTimeIntegrator_ia;
+  real32_T rtb_DiscreteTimeIntegrator_jt;
+  real32_T rtb_DiscreteTimeIntegrator_n;
+  real32_T rtb_DiscreteTimeIntegrator_nt;
+  real32_T rtb_Gain1;
+  real32_T rtb_Gain2;
+  real32_T rtb_Product;
+  real32_T rtb_Product_b;
+  real32_T rtb_Product_b_tmp;
+  real32_T rtb_Product_b_tmp_0;
+  real32_T rtb_Product_dc;
+  real32_T rtb_Product_h;
+  real32_T rtb_Product_jw;
+  real32_T rtb_Product_ke;
+  real32_T rtb_Product_ng;
+  real32_T rtb_Product_o;
+  real32_T rtb_Product_p;
+  real32_T rtb_Saturation1_c_tmp;
+  real32_T rtb_Saturation1_p;
+  real32_T rtb_Saturation8;
+  real32_T rtb_Saturation_h;
+  real32_T rtb_Saturation_k;
+  real32_T rtb_Sum1_al;
+  real32_T rtb_Sum1_b;
+  real32_T rtb_Sum1_c0;
   real32_T rtb_Sum1_j_idx_0;
   real32_T rtb_Sum1_j_idx_1;
   real32_T rtb_Sum1_j_idx_2;
-  real32_T rtb_Compare_k;
-  int32_T tmp_0;
-  real32_T rtb_uDLookupTable_l_tmp;
-  real32_T rtb_Saturation_fr_tmp;
-  real32_T rtb_TrigonometricFunction3_tmp;
-  real32_T rtb_TrigonometricFunction6_tmp;
-  real32_T rtb_Product_b_tmp;
+  real32_T rtb_Sum1_j_idx_3;
+  real32_T rtb_Sum1_l4;
+  real32_T rtb_Sum1_me;
+  real32_T rtb_Sum2_k;
+  real32_T rtb_Sum3_h1;
+  real32_T rtb_Sum4_a;
+  real32_T rtb_Sum4_b;
+  real32_T rtb_Sum_j;
+  real32_T rtb_Sum_j3;
+  real32_T rtb_Sum_nx;
+  real32_T rtb_Switch2_cz;
+  real32_T rtb_Switch3;
+  real32_T rtb_Switch_ep;
+  real32_T rtb_TrigonometricFunction3;
   real32_T rtb_derivativecutofffrequency_0;
-  real32_T rtb_Product_b_tmp_0;
+  real32_T rtb_derivativecutofffrequency_b;
+  real32_T rtb_derivativecutofffrequency_p;
+  real32_T rtb_uDLookupTable;
+  real32_T rtb_uDLookupTable1;
+  real32_T rtb_uDLookupTable1_l;
+  real32_T rtb_uDLookupTable1_p;
+  real32_T rtb_uDLookupTable2_n;
+  real32_T rtb_uDLookupTable3;
+  real32_T rtb_uDLookupTable_a;
+  real32_T rtb_uDLookupTable_cs;
+  uint32_T bpIndices[2];
+  uint32_T bpIndices_0[2];
+  uint32_T bpIdx;
+  uint32_T bpIdx_0;
+  boolean_T rtb_Compare;
+  boolean_T rtb_Compare_ab;
+  boolean_T rtb_Compare_bt;
+  boolean_T rtb_Compare_m;
+  boolean_T rtb_Compare_nh;
+  boolean_T rtb_RelationalOperator_k;
+  boolean_T tmp_0;
 
   /* Trigonometry: '<S9>/Trigonometric Function3' incorporates:
    *  Inport: '<Root>/psi_rad'
    *  Trigonometry: '<S72>/Trigonometric Function3'
    */
-  rtb_TrigonometricFunction6 = static_cast<real32_T>(cos((real_T)
-    QS_InnerRateLoop_U.psi_rad));
+  rtb_DiscreteTimeIntegrator_n = static_cast<real32_T>(cos(static_cast<real_T>
+    (QS_InnerRateLoop_U.psi_rad)));
 
   /* Trigonometry: '<S9>/Trigonometric Function6' incorporates:
    *  Inport: '<Root>/psi_rad'
    *  Trigonometry: '<S72>/Trigonometric Function6'
    */
-  rtb_uDLookupTable_l_tmp = static_cast<real32_T>(sin((real_T)
-    QS_InnerRateLoop_U.psi_rad));
+  rtb_Product_b = static_cast<real32_T>(sin(static_cast<real_T>
+    (QS_InnerRateLoop_U.psi_rad)));
 
   /* Sum: '<S9>/Add5' incorporates:
    *  Inport: '<Root>/vD_fps (KF)'
@@ -312,9 +322,9 @@ void QS_InnerRateLoopModelClass::step()
    *  Trigonometry: '<S9>/Trigonometric Function6'
    */
   rtb_Add5_e = (QS_InnerRateLoop_ConstB.TrigonometricFunction2 *
-                rtb_TrigonometricFunction6 * QS_InnerRateLoop_U.vN_fpsKF +
-                QS_InnerRateLoop_ConstB.TrigonometricFunction2 *
-                rtb_uDLookupTable_l_tmp * QS_InnerRateLoop_U.vE_fpsKF) +
+                rtb_DiscreteTimeIntegrator_n * QS_InnerRateLoop_U.vN_fpsKF +
+                QS_InnerRateLoop_ConstB.TrigonometricFunction2 * rtb_Product_b *
+                QS_InnerRateLoop_U.vE_fpsKF) +
     -QS_InnerRateLoop_ConstB.TrigonometricFunction5 *
     QS_InnerRateLoop_U.vD_fpsKF;
 
@@ -340,12 +350,11 @@ void QS_InnerRateLoopModelClass::step()
    *  Trigonometry: '<S9>/Trigonometric Function3'
    *  Trigonometry: '<S9>/Trigonometric Function6'
    */
-  rtb_Add6_i = ((rtb_Add6_i * rtb_TrigonometricFunction6 -
-                 QS_InnerRateLoop_ConstB.TrigonometricFunction1 *
-                 rtb_uDLookupTable_l_tmp) * QS_InnerRateLoop_U.vN_fpsKF +
-                (rtb_Add6_i * rtb_uDLookupTable_l_tmp +
-                 QS_InnerRateLoop_ConstB.TrigonometricFunction1 *
-                 rtb_TrigonometricFunction6) * QS_InnerRateLoop_U.vE_fpsKF) +
+  rtb_Add6_i = ((rtb_Add6_i * rtb_DiscreteTimeIntegrator_n -
+                 QS_InnerRateLoop_ConstB.TrigonometricFunction1 * rtb_Product_b)
+                * QS_InnerRateLoop_U.vN_fpsKF + (rtb_Add6_i * rtb_Product_b +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction1 *
+    rtb_DiscreteTimeIntegrator_n) * QS_InnerRateLoop_U.vE_fpsKF) +
     QS_InnerRateLoop_ConstB.TrigonometricFunction4 *
     QS_InnerRateLoop_ConstB.TrigonometricFunction2 * QS_InnerRateLoop_U.vD_fpsKF;
 
@@ -360,16 +369,12 @@ void QS_InnerRateLoopModelClass::step()
    * About '<Root>/Math Function4':
    *  Operator: magnitude^2
    */
-  rtb_Saturation8 = static_cast<real32_T>(sqrt((real_T)(rtb_Add5_e * rtb_Add5_e
-    + rtb_Add6_i * rtb_Add6_i)));
+  rtb_Saturation8 = static_cast<real32_T>(sqrt(static_cast<real_T>(rtb_Add5_e *
+    rtb_Add5_e + rtb_Add6_i * rtb_Add6_i)));
 
   /* Saturate: '<Root>/Saturation8' */
   if (rtb_Saturation8 > 6.5F) {
     rtb_Saturation8 = 6.5F;
-  } else {
-    if (rtb_Saturation8 < 0.0F) {
-      rtb_Saturation8 = 0.0F;
-    }
   }
 
   /* End of Saturate: '<Root>/Saturation8' */
@@ -378,13 +383,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Constant: '<S64>/Constant'
    *  Delay: '<S13>/Delay1'
    *  Lookup_n-D: '<S63>/1-D Lookup Table2'
+   *  Saturate: '<Root>/Saturation8'
    */
   bpIndices[0U] = plook_u32ff_bincg(rtb_Saturation8,
     QS_InnerRateLoop_ConstP.pooled7, 4U, &rtb_Abs_i);
   fractions[0U] = rtb_Abs_i;
   for (iU = 0; iU < 36; iU++) {
-    bpIndices[1U] = plook_u32ff_bincg(QS_InnerRateLoop_ConstP.pooled17[iU],
-      QS_InnerRateLoop_ConstP.pooled17, 35U, &rtb_Abs_i);
+    bpIndices[1U] = plook_u32ff_bincg(QS_InnerRateLoop_ConstP.pooled18[iU],
+      QS_InnerRateLoop_ConstP.pooled18, 35U, &rtb_Abs_i);
     fractions[1U] = rtb_Abs_i;
     rtb_uDLookupTable2[iU] = intrp2d_fu32fl_pw(bpIndices, fractions,
       QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_g, 5U);
@@ -394,12 +400,13 @@ void QS_InnerRateLoopModelClass::step()
    *  Constant: '<S63>/Constant'
    *  Delay: '<S13>/Delay1'
    *  Lookup_n-D: '<S64>/1-D Lookup Table2'
+   *  Saturate: '<Root>/Saturation8'
    */
   bpIndices_0[0U] = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U,
     &rtb_Abs_i);
   fractions_0[0U] = rtb_Abs_i;
   for (iU = 0; iU < 16; iU++) {
-    bpIndices_0[1U] = plook_u32ff_evencg(QS_InnerRateLoop_ConstP.pooled18[iU],
+    bpIndices_0[1U] = plook_u32ff_evencg(QS_InnerRateLoop_ConstP.pooled19[iU],
       1.0F, 1.0F, 15U, &rtb_Abs_i);
     fractions_0[1U] = rtb_Abs_i;
     rtb_uDLookupTable2_k5[iU] = intrp2d_fu32fl_pw(bpIndices_0, fractions_0,
@@ -410,8 +417,8 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/theta_rad'
    *  Trigonometry: '<S7>/Trigonometric Function2'
    */
-  rtb_Saturation_fr_tmp = static_cast<real32_T>(cos((real_T)
-    QS_InnerRateLoop_U.theta_rad));
+  rtb_Sum_j = static_cast<real32_T>(cos(static_cast<real_T>
+    (QS_InnerRateLoop_U.theta_rad)));
 
   /* Product: '<S9>/Divide4' incorporates:
    *  Product: '<S9>/Divide9'
@@ -435,53 +442,63 @@ void QS_InnerRateLoopModelClass::step()
    *  Trigonometry: '<S9>/Trigonometric Function3'
    *  Trigonometry: '<S9>/Trigonometric Function6'
    */
-  rtb_uDLookupTable_cs = ((rtb_uDLookupTable_cs * rtb_TrigonometricFunction6 +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction4 * rtb_uDLookupTable_l_tmp) *
-    QS_InnerRateLoop_U.vN_fpsKF + (rtb_uDLookupTable_cs *
-    rtb_uDLookupTable_l_tmp - QS_InnerRateLoop_ConstB.TrigonometricFunction4 *
-    rtb_TrigonometricFunction6) * QS_InnerRateLoop_U.vE_fpsKF) +
+  rtb_uDLookupTable_cs = ((rtb_uDLookupTable_cs * rtb_DiscreteTimeIntegrator_n +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction4 * rtb_Product_b) *
+    QS_InnerRateLoop_U.vN_fpsKF + (rtb_uDLookupTable_cs * rtb_Product_b -
+    QS_InnerRateLoop_ConstB.TrigonometricFunction4 *
+    rtb_DiscreteTimeIntegrator_n) * QS_InnerRateLoop_U.vE_fpsKF) +
     QS_InnerRateLoop_ConstB.TrigonometricFunction1 *
     QS_InnerRateLoop_ConstB.TrigonometricFunction2 * QS_InnerRateLoop_U.vD_fpsKF;
 
   /* Trigonometry: '<S8>/Trigonometric Function5' incorporates:
    *  Inport: '<Root>/theta_rad'
+   *  Trigonometry: '<S7>/Trigonometric Function5'
    */
-  rtb_Saturation1_p = static_cast<real32_T>(sin((real_T)
-    QS_InnerRateLoop_U.theta_rad));
+  rtb_Saturation1_c_tmp = static_cast<real32_T>(sin(static_cast<real_T>
+    (QS_InnerRateLoop_U.theta_rad)));
 
-  /* Trigonometry: '<S8>/Trigonometric Function4' incorporates:
-   *  Inport: '<Root>/phi_rad'
-   *  Trigonometry: '<S7>/Trigonometric Function4'
-   */
-  rtb_TrigonometricFunction6_tmp = static_cast<real32_T>(sin((real_T)
-    QS_InnerRateLoop_U.phi_rad));
-
-  /* Trigonometry: '<S8>/Trigonometric Function1' incorporates:
-   *  Inport: '<Root>/phi_rad'
-   *  Trigonometry: '<S7>/Trigonometric Function1'
-   */
-  rtb_TrigonometricFunction3_tmp = static_cast<real32_T>(cos((real_T)
-    QS_InnerRateLoop_U.phi_rad));
-
-  /* SignalConversion: '<S64>/TmpSignal ConversionAtProductInport2' incorporates:
+  /* SignalConversion generated from: '<S64>/Product' incorporates:
    *  Product: '<S8>/Divide'
    *  Product: '<S8>/Divide2'
    *  Product: '<S8>/Divide6'
    *  Sum: '<S8>/Add5'
    *  Trigonometry: '<S8>/Trigonometric Function2'
+   *  Trigonometry: '<S8>/Trigonometric Function5'
    */
-  rtb_TmpSignalConversionAtProduc[0] = (rtb_Saturation_fr_tmp *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction3 * rtb_Add5_e +
-    rtb_Saturation_fr_tmp * QS_InnerRateLoop_ConstB.TrigonometricFunction6 *
-    rtb_Add6_i) + -rtb_Saturation1_p * rtb_uDLookupTable_cs;
+  rtb_Add5_1[0] = (rtb_Sum_j * QS_InnerRateLoop_ConstB.TrigonometricFunction3 *
+                   rtb_Add5_e + rtb_Sum_j *
+                   QS_InnerRateLoop_ConstB.TrigonometricFunction6 * rtb_Add6_i)
+    + -rtb_Saturation1_c_tmp * rtb_uDLookupTable_cs;
+
+  /* Trigonometry: '<S8>/Trigonometric Function4' incorporates:
+   *  Inport: '<Root>/phi_rad'
+   *  Trigonometry: '<S7>/Trigonometric Function4'
+   */
+  rtb_Sum_nx = static_cast<real32_T>(sin(static_cast<real_T>
+    (QS_InnerRateLoop_U.phi_rad)));
+
+  /* Trigonometry: '<S8>/Trigonometric Function1' incorporates:
+   *  Inport: '<Root>/phi_rad'
+   *  Trigonometry: '<S7>/Trigonometric Function1'
+   */
+  rtb_DiscreteTimeIntegrator_h = static_cast<real32_T>(cos(static_cast<real_T>
+    (QS_InnerRateLoop_U.phi_rad)));
 
   /* Product: '<S8>/Divide1' incorporates:
    *  Product: '<S8>/Divide7'
    *  Trigonometry: '<S8>/Trigonometric Function4'
+   *  Trigonometry: '<S8>/Trigonometric Function5'
    */
-  rtb_Product = rtb_TrigonometricFunction6_tmp * rtb_Saturation1_p;
+  rtb_TrigonometricFunction3 = rtb_Sum_nx * rtb_Saturation1_c_tmp;
 
-  /* SignalConversion: '<S64>/TmpSignal ConversionAtProductInport2' incorporates:
+  /* Product: '<S8>/Divide11' incorporates:
+   *  Product: '<S7>/Divide11'
+   *  Trigonometry: '<S8>/Trigonometric Function2'
+   *  Trigonometry: '<S8>/Trigonometric Function4'
+   */
+  rtb_Add5_tmp = rtb_Sum_nx * rtb_Sum_j;
+
+  /* SignalConversion generated from: '<S64>/Product' incorporates:
    *  Product: '<S8>/Divide1'
    *  Product: '<S8>/Divide11'
    *  Product: '<S8>/Divide13'
@@ -493,32 +510,33 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S8>/Add3'
    *  Sum: '<S8>/Add6'
    *  Trigonometry: '<S8>/Trigonometric Function1'
-   *  Trigonometry: '<S8>/Trigonometric Function2'
-   *  Trigonometry: '<S8>/Trigonometric Function4'
    */
-  rtb_TmpSignalConversionAtProduc[1] = ((rtb_Product *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction3 -
-    rtb_TrigonometricFunction3_tmp *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction6) * rtb_Add5_e + (rtb_Product *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction6 +
-    rtb_TrigonometricFunction3_tmp *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction3) * rtb_Add6_i) +
-    rtb_TrigonometricFunction6_tmp * rtb_Saturation_fr_tmp *
-    rtb_uDLookupTable_cs;
+  rtb_Add5_1[1] = ((rtb_TrigonometricFunction3 *
+                    QS_InnerRateLoop_ConstB.TrigonometricFunction3 -
+                    rtb_DiscreteTimeIntegrator_h *
+                    QS_InnerRateLoop_ConstB.TrigonometricFunction6) * rtb_Add5_e
+                   + (rtb_TrigonometricFunction3 *
+                      QS_InnerRateLoop_ConstB.TrigonometricFunction6 +
+                      rtb_DiscreteTimeIntegrator_h *
+                      QS_InnerRateLoop_ConstB.TrigonometricFunction3) *
+                   rtb_Add6_i) + rtb_Add5_tmp * rtb_uDLookupTable_cs;
 
   /* Product: '<S8>/Divide4' incorporates:
    *  Product: '<S8>/Divide9'
    *  Trigonometry: '<S8>/Trigonometric Function1'
+   *  Trigonometry: '<S8>/Trigonometric Function5'
    */
-  rtb_Product = rtb_TrigonometricFunction3_tmp * rtb_Saturation1_p;
+  rtb_TrigonometricFunction3 = rtb_DiscreteTimeIntegrator_h *
+    rtb_Saturation1_c_tmp;
 
-  /* SignalConversion: '<S64>/TmpSignal ConversionAtProductInport2' incorporates:
-   *  Inport: '<Root>/p_rps'
-   *  Inport: '<Root>/phi_rad'
-   *  Inport: '<Root>/psi_rad'
-   *  Inport: '<Root>/q_rps'
-   *  Inport: '<Root>/r_rps'
-   *  Inport: '<Root>/theta_rad'
+  /* Product: '<S8>/Divide12' incorporates:
+   *  Product: '<S7>/Divide12'
+   *  Trigonometry: '<S8>/Trigonometric Function1'
+   *  Trigonometry: '<S8>/Trigonometric Function2'
+   */
+  rtb_Sum_j *= rtb_DiscreteTimeIntegrator_h;
+
+  /* SignalConversion generated from: '<S64>/Product' incorporates:
    *  Product: '<S8>/Divide10'
    *  Product: '<S8>/Divide12'
    *  Product: '<S8>/Divide14'
@@ -529,25 +547,16 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S8>/Add2'
    *  Sum: '<S8>/Add4'
    *  Sum: '<S8>/Add7'
-   *  Trigonometry: '<S8>/Trigonometric Function1'
-   *  Trigonometry: '<S8>/Trigonometric Function2'
    *  Trigonometry: '<S8>/Trigonometric Function4'
    */
-  rtb_TmpSignalConversionAtProduc[2] = ((rtb_Product *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction3 +
-    rtb_TrigonometricFunction6_tmp *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction6) * rtb_Add5_e + (rtb_Product *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction6 -
-    rtb_TrigonometricFunction6_tmp *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction3) * rtb_Add6_i) +
-    rtb_TrigonometricFunction3_tmp * rtb_Saturation_fr_tmp *
-    rtb_uDLookupTable_cs;
-  rtb_TmpSignalConversionAtProduc[3] = QS_InnerRateLoop_U.p_rps;
-  rtb_TmpSignalConversionAtProduc[4] = QS_InnerRateLoop_U.q_rps;
-  rtb_TmpSignalConversionAtProduc[5] = QS_InnerRateLoop_U.r_rps;
-  rtb_TmpSignalConversionAtProduc[6] = QS_InnerRateLoop_U.phi_rad;
-  rtb_TmpSignalConversionAtProduc[7] = QS_InnerRateLoop_U.theta_rad;
-  rtb_TmpSignalConversionAtProduc[8] = QS_InnerRateLoop_U.psi_rad;
+  rtb_Add5_1[2] = ((rtb_TrigonometricFunction3 *
+                    QS_InnerRateLoop_ConstB.TrigonometricFunction3 + rtb_Sum_nx *
+                    QS_InnerRateLoop_ConstB.TrigonometricFunction6) * rtb_Add5_e
+                   + (rtb_TrigonometricFunction3 *
+                      QS_InnerRateLoop_ConstB.TrigonometricFunction6 -
+                      rtb_Sum_nx *
+                      QS_InnerRateLoop_ConstB.TrigonometricFunction3) *
+                   rtb_Add6_i) + rtb_Sum_j * rtb_uDLookupTable_cs;
 
   /* RelationalOperator: '<S3>/Compare' incorporates:
    *  Constant: '<S3>/Constant'
@@ -560,27 +569,33 @@ void QS_InnerRateLoopModelClass::step()
    *  Delay: '<S96>/Delay2'
    *  RelationalOperator: '<S96>/Relational Operator2'
    */
-  rtb_Sum2_h = static_cast<real_T>((static_cast<int32_T>(rtb_Compare) >
-    static_cast<int32_T>(QS_InnerRateLoop_DW.Delay1_DSTATE))) +
+  rtb_Sum2_h = static_cast<real_T>(static_cast<int32_T>(rtb_Compare) >
+    static_cast<int32_T>(QS_InnerRateLoop_DW.Delay1_DSTATE)) +
     QS_InnerRateLoop_DW.Delay2_DSTATE;
 
   /* Outputs for Enabled SubSystem: '<S11>/Enabled Subsystem1' incorporates:
    *  EnablePort: '<S98>/Enable'
    */
-  /* Logic: '<S11>/Logical Operator3' incorporates:
-   *  Inport: '<Root>/input_col'
-   *  Inport: '<Root>/input_lat'
-   *  Inport: '<Root>/input_lon'
-   *  Inport: '<Root>/input_ped'
-   *  Inport: '<S98>/col'
-   *  Inport: '<S98>/lat'
-   *  Inport: '<S98>/lon'
-   *  Inport: '<S98>/ped'
-   */
+  /* Logic: '<S11>/Logical Operator3' */
   if (!rtb_Compare) {
+    /* SignalConversion generated from: '<S98>/lon' incorporates:
+     *  Inport: '<Root>/input_lon'
+     */
     QS_InnerRateLoop_B.lon = QS_InnerRateLoop_U.input_lon;
+
+    /* SignalConversion generated from: '<S98>/lat' incorporates:
+     *  Inport: '<Root>/input_lat'
+     */
     QS_InnerRateLoop_B.lat = QS_InnerRateLoop_U.input_lat;
-    QS_InnerRateLoop_B.col_h = QS_InnerRateLoop_U.input_col;
+
+    /* SignalConversion generated from: '<S98>/col' incorporates:
+     *  Inport: '<Root>/input_col'
+     */
+    QS_InnerRateLoop_B.col_i = QS_InnerRateLoop_U.input_col;
+
+    /* SignalConversion generated from: '<S98>/ped' incorporates:
+     *  Inport: '<Root>/input_ped'
+     */
     QS_InnerRateLoop_B.ped = QS_InnerRateLoop_U.input_ped;
   }
 
@@ -595,23 +610,12 @@ void QS_InnerRateLoopModelClass::step()
 
   /* DeadZone: '<S97>/Dead Zone2' */
   if (rtb_TrigonometricFunction3 > 0.05F) {
-    rtb_TrigonometricFunction3 -= 0.05F;
+    rtb_Sum1_j_idx_0 = rtb_TrigonometricFunction3 - 0.05F;
   } else if (rtb_TrigonometricFunction3 >= -0.05F) {
-    rtb_TrigonometricFunction3 = 0.0F;
+    rtb_Sum1_j_idx_0 = 0.0F;
   } else {
-    rtb_TrigonometricFunction3 -= -0.05F;
+    rtb_Sum1_j_idx_0 = rtb_TrigonometricFunction3 - -0.05F;
   }
-
-  /* End of DeadZone: '<S97>/Dead Zone2' */
-
-  /* Abs: '<S97>/Abs' */
-  rtb_TrigonometricFunction3 = static_cast<real32_T>(fabs((real_T)
-    rtb_TrigonometricFunction3));
-
-  /* RelationalOperator: '<S99>/Compare' incorporates:
-   *  Constant: '<S99>/Constant'
-   */
-  rtb_Compare_ab = (rtb_TrigonometricFunction3 > 0.0F);
 
   /* Sum: '<S11>/Sum2' incorporates:
    *  Inport: '<Root>/input_lat'
@@ -621,49 +625,27 @@ void QS_InnerRateLoopModelClass::step()
 
   /* DeadZone: '<S97>/Dead Zone1' */
   if (rtb_TrigonometricFunction3 > 0.05F) {
-    rtb_TrigonometricFunction3 -= 0.05F;
+    rtb_Product = rtb_TrigonometricFunction3 - 0.05F;
   } else if (rtb_TrigonometricFunction3 >= -0.05F) {
-    rtb_TrigonometricFunction3 = 0.0F;
+    rtb_Product = 0.0F;
   } else {
-    rtb_TrigonometricFunction3 -= -0.05F;
+    rtb_Product = rtb_TrigonometricFunction3 - -0.05F;
   }
-
-  /* End of DeadZone: '<S97>/Dead Zone1' */
-
-  /* Abs: '<S97>/Abs1' */
-  rtb_TrigonometricFunction3 = static_cast<real32_T>(fabs((real_T)
-    rtb_TrigonometricFunction3));
-
-  /* RelationalOperator: '<S100>/Compare' incorporates:
-   *  Constant: '<S100>/Constant'
-   */
-  rtb_Compare_m = (rtb_TrigonometricFunction3 > 0.0F);
 
   /* Sum: '<S11>/Sum3' incorporates:
    *  Inport: '<Root>/input_col'
    */
   rtb_TrigonometricFunction3 = QS_InnerRateLoop_U.input_col -
-    QS_InnerRateLoop_B.col_h;
+    QS_InnerRateLoop_B.col_i;
 
   /* DeadZone: '<S97>/Dead Zone3' */
   if (rtb_TrigonometricFunction3 > 0.05F) {
-    rtb_TrigonometricFunction3 -= 0.05F;
+    rtb_Saturation_h = rtb_TrigonometricFunction3 - 0.05F;
   } else if (rtb_TrigonometricFunction3 >= -0.05F) {
-    rtb_TrigonometricFunction3 = 0.0F;
+    rtb_Saturation_h = 0.0F;
   } else {
-    rtb_TrigonometricFunction3 -= -0.05F;
+    rtb_Saturation_h = rtb_TrigonometricFunction3 - -0.05F;
   }
-
-  /* End of DeadZone: '<S97>/Dead Zone3' */
-
-  /* Abs: '<S97>/Abs2' */
-  rtb_TrigonometricFunction3 = static_cast<real32_T>(fabs((real_T)
-    rtb_TrigonometricFunction3));
-
-  /* RelationalOperator: '<S101>/Compare' incorporates:
-   *  Constant: '<S101>/Constant'
-   */
-  rtb_Compare_bt = (rtb_TrigonometricFunction3 > 0.0F);
 
   /* Sum: '<S11>/Sum4' incorporates:
    *  Inport: '<Root>/input_ped'
@@ -680,20 +662,32 @@ void QS_InnerRateLoopModelClass::step()
     rtb_TrigonometricFunction3 -= -0.05F;
   }
 
-  /* End of DeadZone: '<S97>/Dead Zone4' */
-
-  /* Abs: '<S97>/Abs3' */
-  rtb_TrigonometricFunction3 = static_cast<real32_T>(fabs((real_T)
-    rtb_TrigonometricFunction3));
-
   /* Logic: '<S11>/Logical Operator2' incorporates:
+   *  Abs: '<S97>/Abs'
+   *  Abs: '<S97>/Abs1'
+   *  Abs: '<S97>/Abs2'
+   *  Abs: '<S97>/Abs3'
+   *  Constant: '<S100>/Constant'
+   *  Constant: '<S101>/Constant'
    *  Constant: '<S102>/Constant'
+   *  Constant: '<S99>/Constant'
+   *  DeadZone: '<S97>/Dead Zone1'
+   *  DeadZone: '<S97>/Dead Zone2'
+   *  DeadZone: '<S97>/Dead Zone3'
+   *  DeadZone: '<S97>/Dead Zone4'
    *  Logic: '<S97>/Logical Operator'
    *  Logic: '<S97>/Logical Operator1'
+   *  RelationalOperator: '<S100>/Compare'
+   *  RelationalOperator: '<S101>/Compare'
    *  RelationalOperator: '<S102>/Compare'
+   *  RelationalOperator: '<S99>/Compare'
    */
-  rtb_Compare_ab = ((!rtb_Compare_ab) && (!rtb_Compare_m) && (!rtb_Compare_bt) &&
-                    (!(rtb_TrigonometricFunction3 > 0.0F)) && rtb_Compare);
+  rtb_Compare_ab = ((!(static_cast<real32_T>(fabs(static_cast<real_T>
+    (rtb_Sum1_j_idx_0))) > 0.0F)) && (!(static_cast<real32_T>(fabs
+    (static_cast<real_T>(rtb_Product))) > 0.0F)) && (!(static_cast<real32_T>
+    (fabs(static_cast<real_T>(rtb_Saturation_h))) > 0.0F)) && (!(static_cast<
+    real32_T>(fabs(static_cast<real_T>(rtb_TrigonometricFunction3))) > 0.0F)) &&
+                    rtb_Compare);
 
   /* Logic: '<S11>/Logical Operator1' incorporates:
    *  Abs: '<S11>/Abs'
@@ -708,19 +702,26 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_a = 0.0F;
   }
 
-  /* Lookup_n-D: '<S92>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S92>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* DiscreteIntegrator: '<S69>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S13>/Discrete-Time Integrator'
+   *  DiscreteIntegrator: '<S69>/Discrete-Time Integrator1'
+   *  DiscreteIntegrator: '<S69>/Discrete-Time Integrator2'
    *  Inport: '<Root>/pos North (KF)'
+   *  Logic: '<Root>/Logical Operator2'
    */
   if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOADI != 0) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_m =
       QS_InnerRateLoop_U.posNorthKF;
   }
 
+  rtb_Compare_nh = !rtb_Compare_m;
   if ((rtb_Compare_m && (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_a <=
-                         0)) || ((!rtb_Compare_m) &&
+                         0)) || (rtb_Compare_nh &&
        (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_a == 1))) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_m =
       QS_InnerRateLoop_U.posNorthKF;
@@ -734,7 +735,7 @@ void QS_InnerRateLoopModelClass::step()
    */
   rtb_Product = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_m -
                  QS_InnerRateLoop_U.posNorthKF) * intrp1d_fu32fl_pw(bpIdx,
-    rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled20);
+    rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled21);
 
   /* Sum: '<S77>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
@@ -745,10 +746,8 @@ void QS_InnerRateLoopModelClass::step()
   /* Saturate: '<S70>/Saturation' */
   if (rtb_Saturation_h > 10.0F) {
     rtb_Saturation_h = 10.0F;
-  } else {
-    if (rtb_Saturation_h < -10.0F) {
-      rtb_Saturation_h = -10.0F;
-    }
+  } else if (rtb_Saturation_h < -10.0F) {
+    rtb_Saturation_h = -10.0F;
   }
 
   /* End of Saturate: '<S70>/Saturation' */
@@ -759,7 +758,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_h = 0.0F;
   }
 
-  /* Lookup_n-D: '<S89>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S89>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* DiscreteIntegrator: '<S69>/Discrete-Time Integrator1' incorporates:
@@ -771,7 +772,7 @@ void QS_InnerRateLoopModelClass::step()
   }
 
   if ((rtb_Compare_m && (QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevRes <=
-                         0)) || ((!rtb_Compare_m) &&
+                         0)) || (rtb_Compare_nh &&
        (QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevRes == 1))) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTATE =
       QS_InnerRateLoop_U.posEastKF;
@@ -785,7 +786,7 @@ void QS_InnerRateLoopModelClass::step()
    */
   rtb_Product_ng = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTATE -
                     QS_InnerRateLoop_U.posEastKF) * intrp1d_fu32fl_pw(bpIdx,
-    rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled20);
+    rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled21);
 
   /* Sum: '<S76>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S91>/Discrete-Time Integrator'
@@ -796,10 +797,8 @@ void QS_InnerRateLoopModelClass::step()
   /* Saturate: '<S70>/Saturation1' */
   if (rtb_Saturation1_p > 10.0F) {
     rtb_Saturation1_p = 10.0F;
-  } else {
-    if (rtb_Saturation1_p < -10.0F) {
-      rtb_Saturation1_p = -10.0F;
-    }
+  } else if (rtb_Saturation1_p < -10.0F) {
+    rtb_Saturation1_p = -10.0F;
   }
 
   /* End of Saturate: '<S70>/Saturation1' */
@@ -810,7 +809,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_c = 0.0F;
   }
 
-  /* Lookup_n-D: '<S87>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S87>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* DiscreteIntegrator: '<S69>/Discrete-Time Integrator2' incorporates:
@@ -822,7 +823,7 @@ void QS_InnerRateLoopModelClass::step()
   }
 
   if ((rtb_Compare_m && (QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_PrevRes <=
-                         0)) || ((!rtb_Compare_m) &&
+                         0)) || (rtb_Compare_nh &&
        (QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_PrevRes == 1))) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_DSTATE =
       QS_InnerRateLoop_U.posDownKF;
@@ -834,23 +835,21 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S87>/1-D Lookup Table2'
    *  Sum: '<S75>/Sum'
    */
-  rtb_Product_ee = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_DSTATE -
-                    QS_InnerRateLoop_U.posDownKF) * intrp1d_fu32fl_pw(bpIdx,
+  rtb_Sum_nx = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_DSTATE -
+                QS_InnerRateLoop_U.posDownKF) * intrp1d_fu32fl_pw(bpIdx,
     rtb_Abs_i, QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_k);
 
   /* Sum: '<S75>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S88>/Discrete-Time Integrator'
    */
-  rtb_Saturation2_h = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_c +
-    rtb_Product_ee;
+  rtb_DiscreteTimeIntegrator_h =
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_c + rtb_Sum_nx;
 
   /* Saturate: '<S70>/Saturation2' */
-  if (rtb_Saturation2_h > 15.0F) {
-    rtb_Saturation2_h = 15.0F;
-  } else {
-    if (rtb_Saturation2_h < -15.0F) {
-      rtb_Saturation2_h = -15.0F;
-    }
+  if (rtb_DiscreteTimeIntegrator_h > 15.0F) {
+    rtb_DiscreteTimeIntegrator_h = 15.0F;
+  } else if (rtb_DiscreteTimeIntegrator_h < -15.0F) {
+    rtb_DiscreteTimeIntegrator_h = -15.0F;
   }
 
   /* End of Saturate: '<S70>/Saturation2' */
@@ -860,12 +859,11 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S12>/Sum21'
    *  UnitDelay: '<S12>/Unit Delay'
    */
-  rtb_Product2 = (static_cast<real32_T>(rtb_Compare_m) +
-                  QS_InnerRateLoop_DW.UnitDelay_DSTATE) * static_cast<real32_T>
-    (rtb_Compare_m);
+  rtb_TrigonometricFunction3 = (static_cast<real32_T>(rtb_Compare_m) +
+    QS_InnerRateLoop_DW.UnitDelay_DSTATE) * static_cast<real32_T>(rtb_Compare_m);
 
   /* Gain: '<S12>/Gain2' */
-  rtb_Gain2 = 0.0025F * rtb_Product2;
+  rtb_Gain2 = 0.0025F * rtb_TrigonometricFunction3;
 
   /* Switch: '<S12>/Switch1' incorporates:
    *  Constant: '<S12>/Constant'
@@ -873,70 +871,77 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S12>/Sum'
    */
   if (rtb_Gain2 >= 20.0F) {
-    rtb_uDLookupTable3 = rtb_Gain2 - 20.0F;
+    rtb_Sum1_j_idx_0 = rtb_Gain2 - 20.0F;
   } else {
-    rtb_uDLookupTable3 = 0.0F;
+    rtb_Sum1_j_idx_0 = 0.0F;
   }
-
-  /* End of Switch: '<S12>/Switch1' */
 
   /* Product: '<S12>/Divide1' incorporates:
    *  Inport: '<Root>/Rp'
    *  Inport: '<Root>/Rv'
+   *  Switch: '<S12>/Switch1'
    */
-  rtb_Sum4_a = rtb_uDLookupTable3 / QS_InnerRateLoop_U.Rv *
-    QS_InnerRateLoop_U.Rp;
+  rtb_Sum4_a = rtb_Sum1_j_idx_0 / QS_InnerRateLoop_U.Rv * QS_InnerRateLoop_U.Rp;
 
-  /* Lookup_n-D: '<S12>/1-D Lookup Table3' */
-  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.2F, 23U, &rtb_Abs_i);
+  /* Lookup_n-D: '<S12>/1-D Lookup Table3' incorporates:
+   *  Sum: '<Root>/Sum4'
+   */
+  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.107334696F, 36U, &rtb_Abs_i);
   rtb_uDLookupTable3 = intrp1d_fu32fla_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.pooled26, 23U);
+    QS_InnerRateLoop_ConstP.pooled27, 36U);
 
   /* Gain: '<S12>/Gain1' */
-  rtb_Sum3_f = 0.0174532924F * rtb_uDLookupTable3;
+  rtb_Sum3_h1 = 0.0174532924F * rtb_uDLookupTable3;
 
   /* Trigonometry: '<S103>/Trigonometric Function3' */
-  rtb_derivativecutofffrequency_b = static_cast<real32_T>(cos((real_T)rtb_Sum3_f));
+  rtb_derivativecutofffrequency_b = static_cast<real32_T>(cos(static_cast<real_T>
+    (rtb_Sum3_h1)));
 
   /* Trigonometry: '<S103>/Trigonometric Function6' */
-  rtb_Sum3_f = static_cast<real32_T>(sin((real_T)rtb_Sum3_f));
+  rtb_Sum3_h1 = static_cast<real32_T>(sin(static_cast<real_T>(rtb_Sum3_h1)));
 
-  /* Lookup_n-D: '<S12>/1-D Lookup Table1' */
-  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.2F, 23U, &rtb_Abs_i);
+  /* Lookup_n-D: '<S12>/1-D Lookup Table1' incorporates:
+   *  Sum: '<Root>/Sum4'
+   */
+  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.107334696F, 36U, &rtb_Abs_i);
 
   /* Product: '<S12>/Divide3' incorporates:
    *  Inport: '<Root>/Rv'
    *  Lookup_n-D: '<S12>/1-D Lookup Table1'
    */
   rtb_Sum4_b = intrp1d_fu32fla_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.pooled26, 23U) / QS_InnerRateLoop_U.Rv;
+    QS_InnerRateLoop_ConstP.pooled27, 36U) / QS_InnerRateLoop_U.Rv;
 
-  /* Lookup_n-D: '<S12>/1-D Lookup Table' */
-  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.2F, 23U, &rtb_Abs_i);
+  /* Lookup_n-D: '<S12>/1-D Lookup Table' incorporates:
+   *  Sum: '<Root>/Sum4'
+   */
+  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.107334696F, 36U, &rtb_Abs_i);
 
   /* Product: '<S12>/Divide2' incorporates:
    *  Inport: '<Root>/Rv'
    *  Lookup_n-D: '<S12>/1-D Lookup Table'
    */
-  rtb_Add5_ky = intrp1d_fu32fla_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.uDLookupTable_tableData, 23U) /
+  rtb_Add5_l = intrp1d_fu32fla_pw(bpIdx, rtb_Abs_i,
+    QS_InnerRateLoop_ConstP.uDLookupTable_tableData, 36U) /
     QS_InnerRateLoop_U.Rv;
 
-  /* Lookup_n-D: '<S12>/1-D Lookup Table2' */
-  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.2F, 23U, &rtb_Abs_i);
+  /* Lookup_n-D: '<S12>/1-D Lookup Table2' incorporates:
+   *  Sum: '<Root>/Sum4'
+   */
+  bpIdx = plook_u32ff_evenca(rtb_Sum4_a, 0.0F, 0.107334696F, 36U, &rtb_Abs_i);
 
   /* Product: '<S12>/Divide4' incorporates:
    *  Inport: '<Root>/Rv'
    *  Lookup_n-D: '<S12>/1-D Lookup Table2'
    */
   rtb_Sum4_a = intrp1d_fu32fla_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.pooled26, 23U) / QS_InnerRateLoop_U.Rv;
+    QS_InnerRateLoop_ConstP.pooled27, 36U) / QS_InnerRateLoop_U.Rv;
 
   /* Product: '<S103>/Divide4' incorporates:
    *  Product: '<S103>/Divide9'
    */
-  rtb_Add7_d = QS_InnerRateLoop_ConstB.TrigonometricFunction1_k *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction5_o;
+  rtb_Add7_f2 = QS_InnerRateLoop_ConstB.TrigonometricFunction1_p *
+    QS_InnerRateLoop_ConstB.TrigonometricFunction5_b;
 
   /* Sum: '<S103>/Add7' incorporates:
    *  Product: '<S103>/Divide10'
@@ -949,18 +954,18 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S103>/Add2'
    *  Sum: '<S103>/Add4'
    */
-  rtb_Add7_d = ((rtb_Add7_d * rtb_derivativecutofffrequency_b +
-                 QS_InnerRateLoop_ConstB.TrigonometricFunction4_n * rtb_Sum3_f) *
-                rtb_Sum4_b + (rtb_Add7_d * rtb_Sum3_f -
-    QS_InnerRateLoop_ConstB.TrigonometricFunction4_n *
-    rtb_derivativecutofffrequency_b) * rtb_Add5_ky) +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction1_k *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction2_l * rtb_Sum4_a;
+  rtb_Add7_f2 = ((rtb_Add7_f2 * rtb_derivativecutofffrequency_b +
+                  QS_InnerRateLoop_ConstB.TrigonometricFunction4_g * rtb_Sum3_h1)
+                 * rtb_Sum4_b + (rtb_Add7_f2 * rtb_Sum3_h1 -
+    QS_InnerRateLoop_ConstB.TrigonometricFunction4_g *
+    rtb_derivativecutofffrequency_b) * rtb_Add5_l) +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction1_p *
+    QS_InnerRateLoop_ConstB.TrigonometricFunction2_i * rtb_Sum4_a;
 
   /* Product: '<S72>/Divide4' incorporates:
    *  Product: '<S72>/Divide9'
    */
-  rtb_Sum2_k = QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
+  rtb_Switch_ep = QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
     QS_InnerRateLoop_ConstB.TrigonometricFunction5_j;
 
   /* Sum: '<S70>/Sum2' incorporates:
@@ -975,14 +980,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S72>/Add4'
    *  Sum: '<S72>/Add7'
    */
-  rtb_Sum2_k = (((rtb_Sum2_k * rtb_TrigonometricFunction6 +
-                  QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
-                  rtb_uDLookupTable_l_tmp) * rtb_Saturation_h + (rtb_Sum2_k *
-    rtb_uDLookupTable_l_tmp - QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
-    rtb_TrigonometricFunction6) * rtb_Saturation1_p) +
+  rtb_Sum2_k = (((rtb_Switch_ep * rtb_DiscreteTimeIntegrator_n +
+                  QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
+                  rtb_Product_b) * rtb_Saturation_h + (rtb_Switch_ep *
+    rtb_Product_b - QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
+    rtb_DiscreteTimeIntegrator_n) * rtb_Saturation1_p) +
                 QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
-                QS_InnerRateLoop_ConstB.TrigonometricFunction2_a *
-                rtb_Saturation2_h) + rtb_Add7_d;
+                QS_InnerRateLoop_ConstB.TrigonometricFunction2_ak *
+                rtb_DiscreteTimeIntegrator_h) + rtb_Add7_f2;
 
   /* Saturate: '<S13>/Saturation2' */
   if (rtb_Sum2_k > 15.0F) {
@@ -995,15 +1000,20 @@ void QS_InnerRateLoopModelClass::step()
 
   /* End of Saturate: '<S13>/Saturation2' */
 
+  /* Logic: '<S13>/Logical Operator2' incorporates:
+   *  DiscreteIntegrator: '<S105>/Discrete-Time Integrator'
+   *  Inport: '<Root>/engage'
+   *  Logic: '<Root>/Logical Operator'
+   */
+  tmp_0 = !QS_InnerRateLoop_U.engage;
+
   /* Outputs for Enabled SubSystem: '<S13>/Enabled Subsystem1' incorporates:
    *  EnablePort: '<S104>/Enable'
    */
-  /* Logic: '<S13>/Logical Operator2' incorporates:
-   *  Inport: '<Root>/engage'
-   *  Inport: '<Root>/input_col'
-   *  Inport: '<S104>/col'
-   */
-  if (!QS_InnerRateLoop_U.engage) {
+  if (tmp_0) {
+    /* SignalConversion generated from: '<S104>/col' incorporates:
+     *  Inport: '<Root>/input_col'
+     */
     QS_InnerRateLoop_B.col = QS_InnerRateLoop_U.input_col;
   }
 
@@ -1011,6 +1021,7 @@ void QS_InnerRateLoopModelClass::step()
   /* End of Outputs for SubSystem: '<S13>/Enabled Subsystem1' */
 
   /* Switch: '<S108>/Switch' incorporates:
+   *  DeadZone: '<S13>/Dead Zone'
    *  Gain: '<S13>/wcmd'
    */
   if (rtb_Compare_m) {
@@ -1023,15 +1034,14 @@ void QS_InnerRateLoopModelClass::step()
 
     /* DeadZone: '<S13>/Dead Zone' */
     if (rtb_DeadZone > 0.05F) {
-      rtb_DeadZone -= 0.05F;
+      rtb_Sum1_j_idx_0 = rtb_DeadZone - 0.05F;
     } else if (rtb_DeadZone >= -0.05F) {
-      rtb_DeadZone = 0.0F;
+      rtb_Sum1_j_idx_0 = 0.0F;
     } else {
-      rtb_DeadZone -= -0.05F;
+      rtb_Sum1_j_idx_0 = rtb_DeadZone - -0.05F;
     }
 
-    /* End of DeadZone: '<S13>/Dead Zone' */
-    rtb_Switch_ep = -6.0F * rtb_DeadZone;
+    rtb_Switch_ep = -6.0F * rtb_Sum1_j_idx_0;
   }
 
   /* End of Switch: '<S108>/Switch' */
@@ -1053,22 +1063,24 @@ void QS_InnerRateLoopModelClass::step()
 
   /* Saturate: '<S108>/Saturation' */
   if (rtb_DeadZone > 0.0025F) {
-    rtb_Sum_j3 = 0.0025F;
+    rtb_Sum1_j_idx_0 = 0.0025F;
   } else if (rtb_DeadZone < -0.0025F) {
-    rtb_Sum_j3 = -0.0025F;
+    rtb_Sum1_j_idx_0 = -0.0025F;
   } else {
-    rtb_Sum_j3 = rtb_DeadZone;
+    rtb_Sum1_j_idx_0 = rtb_DeadZone;
   }
 
-  /* End of Saturate: '<S108>/Saturation' */
-
-  /* Sum: '<S108>/Sum' */
-  rtb_Sum_j3 = rtb_DeadZone - rtb_Sum_j3;
+  /* Sum: '<S108>/Sum' incorporates:
+   *  Saturate: '<S108>/Saturation'
+   */
+  rtb_Sum_j3 = rtb_DeadZone - rtb_Sum1_j_idx_0;
 
   /* Sum: '<S108>/Sum2' */
   rtb_Switch_ep += rtb_Sum_j3;
 
-  /* Lookup_n-D: '<S42>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S42>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Product: '<S42>/Product' incorporates:
@@ -1076,15 +1088,15 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S39>/Sum'
    *  UnitDelay: '<S39>/Unit Delay'
    */
-  rtb_Product_of = (rtb_Switch_ep - QS_InnerRateLoop_DW.UnitDelay_DSTATE_a) /
+  rtb_Product_dc = (rtb_Switch_ep - QS_InnerRateLoop_DW.UnitDelay_DSTATE_a) /
     intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
                       QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_j);
 
   /* Product: '<S103>/Divide1' incorporates:
    *  Product: '<S103>/Divide7'
    */
-  rtb_DeadZone = QS_InnerRateLoop_ConstB.TrigonometricFunction4_n *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction5_o;
+  rtb_Add6_m = QS_InnerRateLoop_ConstB.TrigonometricFunction4_g *
+    QS_InnerRateLoop_ConstB.TrigonometricFunction5_b;
 
   /* Sum: '<S103>/Add6' incorporates:
    *  Product: '<S103>/Divide1'
@@ -1097,16 +1109,16 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S103>/Add1'
    *  Sum: '<S103>/Add3'
    */
-  rtb_Add6_a = ((rtb_DeadZone * rtb_derivativecutofffrequency_b -
-                 QS_InnerRateLoop_ConstB.TrigonometricFunction1_k * rtb_Sum3_f) *
-                rtb_Sum4_b + (rtb_DeadZone * rtb_Sum3_f +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction1_k *
-    rtb_derivativecutofffrequency_b) * rtb_Add5_ky) +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction4_n *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction2_l * rtb_Sum4_a;
+  rtb_Add6_m = ((rtb_Add6_m * rtb_derivativecutofffrequency_b -
+                 QS_InnerRateLoop_ConstB.TrigonometricFunction1_p * rtb_Sum3_h1)
+                * rtb_Sum4_b + (rtb_Add6_m * rtb_Sum3_h1 +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction1_p *
+    rtb_derivativecutofffrequency_b) * rtb_Add5_l) +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction4_g *
+    QS_InnerRateLoop_ConstB.TrigonometricFunction2_i * rtb_Sum4_a;
 
   /* Gain: '<S70>/Gain1' */
-  rtb_Gain1 = 0.0F * rtb_Add6_a;
+  rtb_Gain1 = 0.0F * rtb_Add6_m;
 
   /* DiscreteIntegrator: '<S32>/Discrete-Time Integrator1' incorporates:
    *  Inport: '<Root>/engage'
@@ -1123,17 +1135,16 @@ void QS_InnerRateLoopModelClass::step()
    *  Constant: '<S23>/Constant'
    */
   if (rtb_Compare_m) {
-    rtb_Compare_k = rtb_Gain1;
+    rtb_Sum1_j_idx_0 = rtb_Gain1;
   } else {
-    rtb_Compare_k = 0.0F;
+    rtb_Sum1_j_idx_0 = 0.0F;
   }
-
-  /* End of Switch: '<S23>/Switch' */
 
   /* Sum: '<S23>/Sum3' incorporates:
    *  DiscreteIntegrator: '<S32>/Discrete-Time Integrator1'
+   *  Switch: '<S23>/Switch'
    */
-  rtb_DeadZone = rtb_Compare_k +
+  rtb_DeadZone = rtb_Sum1_j_idx_0 +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_o;
 
   /* Gain: '<S30>/derivative cutoff frequency 1' incorporates:
@@ -1149,14 +1160,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S103>/Divide2'
    *  Product: '<S103>/Divide6'
    */
-  rtb_Add5_ky = (QS_InnerRateLoop_ConstB.TrigonometricFunction2_l *
-                 rtb_derivativecutofffrequency_b * rtb_Sum4_b +
-                 QS_InnerRateLoop_ConstB.TrigonometricFunction2_l * rtb_Sum3_f *
-                 rtb_Add5_ky) +
-    -QS_InnerRateLoop_ConstB.TrigonometricFunction5_o * rtb_Sum4_a;
+  rtb_Add5_l = (QS_InnerRateLoop_ConstB.TrigonometricFunction2_i *
+                rtb_derivativecutofffrequency_b * rtb_Sum4_b +
+                QS_InnerRateLoop_ConstB.TrigonometricFunction2_i * rtb_Sum3_h1 *
+                rtb_Add5_l) + -QS_InnerRateLoop_ConstB.TrigonometricFunction5_b *
+    rtb_Sum4_a;
 
   /* Gain: '<S70>/Gain' */
-  rtb_derivativecutofffrequency_b = 0.0F * rtb_Add5_ky;
+  rtb_derivativecutofffrequency_b = 0.0F * rtb_Add5_l;
 
   /* DiscreteIntegrator: '<S48>/Discrete-Time Integrator1' incorporates:
    *  Inport: '<Root>/engage'
@@ -1166,23 +1177,22 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_m = 0.0F;
   }
 
-  rtb_Sum3_f = QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_m;
+  rtb_Sum3_h1 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_m;
 
   /* Switch: '<S25>/Switch' incorporates:
    *  Constant: '<S25>/Constant'
    */
   if (rtb_Compare_m) {
-    rtb_Compare_k = rtb_derivativecutofffrequency_b;
+    rtb_Sum1_j_idx_0 = rtb_derivativecutofffrequency_b;
   } else {
-    rtb_Compare_k = 0.0F;
+    rtb_Sum1_j_idx_0 = 0.0F;
   }
-
-  /* End of Switch: '<S25>/Switch' */
 
   /* Sum: '<S25>/Sum4' incorporates:
    *  DiscreteIntegrator: '<S48>/Discrete-Time Integrator1'
+   *  Switch: '<S25>/Switch'
    */
-  rtb_Sum4_b = rtb_Compare_k +
+  rtb_Sum4_b = rtb_Sum1_j_idx_0 +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_m;
 
   /* Gain: '<S46>/derivative cutoff frequency 1' incorporates:
@@ -1190,8 +1200,8 @@ void QS_InnerRateLoopModelClass::step()
    *  Gain: '<S46>/derivative cutoff frequency '
    *  Sum: '<S46>/Sum1'
    */
-  rtb_Compare_k = (rtb_Sum4_b -
-                   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_o) * 100.0F;
+  rtb_derivativecutofffrequency_p = (rtb_Sum4_b -
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_o) * 100.0F;
 
   /* Logic: '<S12>/Logical Operator2' incorporates:
    *  Constant: '<S12>/Constant7'
@@ -1217,10 +1227,8 @@ void QS_InnerRateLoopModelClass::step()
   rtb_uDLookupTable3 = rtb_Sum4_a - QS_InnerRateLoop_DW.PrevY;
   if (rtb_uDLookupTable3 > 0.25F) {
     rtb_Sum4_a = QS_InnerRateLoop_DW.PrevY + 0.25F;
-  } else {
-    if (rtb_uDLookupTable3 < -0.25F) {
-      rtb_Sum4_a = QS_InnerRateLoop_DW.PrevY + -0.25F;
-    }
+  } else if (rtb_uDLookupTable3 < -0.25F) {
+    rtb_Sum4_a = QS_InnerRateLoop_DW.PrevY - 0.25F;
   }
 
   QS_InnerRateLoop_DW.PrevY = rtb_Sum4_a;
@@ -1230,15 +1238,13 @@ void QS_InnerRateLoopModelClass::step()
   /* Outputs for Enabled SubSystem: '<Root>/Determine Heading at Start of Manuever  All trajectories relative to this heading' incorporates:
    *  EnablePort: '<S4>/Enable'
    */
-  /* Logic: '<Root>/Logical Operator2' */
-  if (!rtb_Compare_m) {
+  if (rtb_Compare_nh) {
     /* Gain: '<S4>/Gain' incorporates:
      *  Inport: '<Root>/psi_rad'
      */
     QS_InnerRateLoop_B.Gain = 57.2957802F * QS_InnerRateLoop_U.psi_rad;
   }
 
-  /* End of Logic: '<Root>/Logical Operator2' */
   /* End of Outputs for SubSystem: '<Root>/Determine Heading at Start of Manuever  All trajectories relative to this heading' */
 
   /* Sum: '<Root>/Sum4' */
@@ -1248,7 +1254,7 @@ void QS_InnerRateLoopModelClass::step()
   rtb_uDLookupTable3 = 0.0174532924F * rtb_Sum4_a;
 
   /* Delay: '<S13>/Delay' */
-  if (QS_InnerRateLoop_DW.icLoad != 0) {
+  if (QS_InnerRateLoop_DW.icLoad) {
     QS_InnerRateLoop_DW.Delay_DSTATE = rtb_uDLookupTable3;
   }
 
@@ -1271,7 +1277,7 @@ void QS_InnerRateLoopModelClass::step()
   }
 
   if ((rtb_Compare_m && (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_p <=
-                         0)) || ((!rtb_Compare_m) &&
+                         0)) || (rtb_Compare_nh &&
        (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_p == 1))) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mz = rtb_Switch3;
   }
@@ -1333,15 +1339,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = 0.0F;
   }
 
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f >= 0.1F) {
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = 0.1F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f <= -0.1F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = -0.1F;
-    }
-  }
-
-  /* Lookup_n-D: '<S37>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S37>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* DiscreteIntegrator: '<S39>/Discrete-Time Integrator' incorporates:
@@ -1357,22 +1357,26 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S37>/1-D Lookup Table2'
    *  Sum: '<S24>/Sum2'
    */
-  rtb_Product_ib = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_fs -
-                    rtb_uDLookupTable_cs) * intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+  rtb_Product_o = (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_fs -
+                   rtb_uDLookupTable_cs) * intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_o);
 
   /* Sum: '<S24>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S40>/Discrete-Time Integrator'
    */
   rtb_Sum1_c0 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f +
-    rtb_Product_ib;
+    rtb_Product_o;
 
-  /* Lookup_n-D: '<S24>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S24>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable_cs = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_k);
 
-  /* Lookup_n-D: '<S24>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S24>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable1 = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData);
@@ -1396,7 +1400,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o2 = 0.0F;
   }
 
-  /* Lookup_n-D: '<S28>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S28>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Product: '<S28>/Product' incorporates:
@@ -1404,11 +1410,13 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S28>/1-D Lookup Table2'
    *  Sum: '<S23>/Sum'
    */
-  rtb_Product_jr = (rtb_DeadZone - QS_InnerRateLoop_U.phi_rad) *
+  rtb_Product_ke = (rtb_DeadZone - QS_InnerRateLoop_U.phi_rad) *
     intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
                       QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_a);
 
-  /* Lookup_n-D: '<S27>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S27>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Sum: '<S23>/Sum1' incorporates:
@@ -1419,17 +1427,21 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S27>/Product'
    *  Sum: '<S23>/Sum2'
    */
-  rtb_Sum1_fe = (rtb_derivativecutofffrequency_0 - QS_InnerRateLoop_U.p_rps) *
+  rtb_Sum1_l4 = (rtb_derivativecutofffrequency_0 - QS_InnerRateLoop_U.p_rps) *
     intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-                      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_fu) +
-    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o2 + rtb_Product_jr);
+                      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_f) +
+    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o2 + rtb_Product_ke);
 
-  /* Lookup_n-D: '<S23>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S23>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_l);
 
-  /* Lookup_n-D: '<S23>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S23>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable1_p = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData_n);
@@ -1446,7 +1458,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j = 0.0F;
   }
 
-  /* Lookup_n-D: '<S44>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S44>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Product: '<S44>/Product' incorporates:
@@ -1454,11 +1468,13 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S44>/1-D Lookup Table2'
    *  Sum: '<S25>/Sum'
    */
-  rtb_Product_n = (rtb_Sum4_b - QS_InnerRateLoop_U.theta_rad) *
+  rtb_Product_p = (rtb_Sum4_b - QS_InnerRateLoop_U.theta_rad) *
     intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
                       QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_ex);
 
-  /* Lookup_n-D: '<S43>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S43>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Sum: '<S25>/Sum1' incorporates:
@@ -1469,17 +1485,21 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S43>/Product'
    *  Sum: '<S25>/Sum2'
    */
-  rtb_uDLookupTable2_bw = (rtb_Compare_k - QS_InnerRateLoop_U.q_rps) *
-    intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-                      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_c) +
-    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j + rtb_Product_n);
+  rtb_uDLookupTable2_n = (rtb_derivativecutofffrequency_p -
+    QS_InnerRateLoop_U.q_rps) * intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+    QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_cv) +
+    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j + rtb_Product_p);
 
-  /* Lookup_n-D: '<S25>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S25>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_Saturation_k = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_m);
 
-  /* Lookup_n-D: '<S25>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S25>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable1_l = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData_d);
@@ -1496,7 +1516,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_l = 0.0F;
   }
 
-  /* Lookup_n-D: '<S54>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S54>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Switch: '<S26>/Switch1' incorporates:
@@ -1506,7 +1528,7 @@ void QS_InnerRateLoopModelClass::step()
     /* Sum: '<S26>/Sum1' incorporates:
      *  Inport: '<Root>/psi_rad'
      */
-    rtb_Sum1_gw = rtb_Switch3 - QS_InnerRateLoop_U.psi_rad;
+    rtb_Sum1_me = rtb_Switch3 - QS_InnerRateLoop_U.psi_rad;
 
     /* Switch: '<S62>/Switch' incorporates:
      *  Constant: '<S62>/Constant1'
@@ -1514,11 +1536,11 @@ void QS_InnerRateLoopModelClass::step()
      *  Gain: '<S62>/Gain1'
      *  Switch: '<S62>/Switch1'
      */
-    if (rtb_Sum1_gw >= 0.0F) {
-      rtb_Abs_k = rtb_Sum1_gw;
+    if (rtb_Sum1_me >= 0.0F) {
+      rtb_Abs_k = rtb_Sum1_me;
       iU = 1;
     } else {
-      rtb_Abs_k = -rtb_Sum1_gw;
+      rtb_Abs_k = -rtb_Sum1_me;
       iU = -1;
     }
 
@@ -1530,24 +1552,26 @@ void QS_InnerRateLoopModelClass::step()
      *  Product: '<S62>/Divide'
      *  Rounding: '<S62>/Rounding Function'
      *  Sum: '<S62>/Subtract'
+     *  Switch: '<S62>/Switch1'
      */
-    rtb_Product_cw = (rtb_Abs_k - static_cast<real32_T>(floor((real_T)(rtb_Abs_k
-      * 0.159154937F))) * 6.28318548F) * static_cast<real32_T>(iU);
+    rtb_Product_h = (rtb_Abs_k - static_cast<real32_T>(floor(static_cast<real_T>
+      (rtb_Abs_k * 0.159154937F))) * 6.28318548F) * static_cast<real32_T>(iU);
 
     /* Switch: '<S53>/Switch' incorporates:
      *  Abs: '<S53>/Abs'
      */
-    if (static_cast<real32_T>(fabs((real_T)rtb_Product_cw)) > 3.14159274F) {
+    if (static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Product_h))) >
+        3.14159274F) {
       /* Switch: '<S53>/Switch1' incorporates:
        *  Constant: '<S53>/Constant1'
        *  Constant: '<S53>/Constant2'
        *  Sum: '<S53>/Add'
        *  Sum: '<S53>/Subtract'
        */
-      if (rtb_Product_cw >= 0.0F) {
-        rtb_Product_cw -= 6.28318548F;
+      if (rtb_Product_h >= 0.0F) {
+        rtb_Product_h -= 6.28318548F;
       } else {
-        rtb_Product_cw += 6.28318548F;
+        rtb_Product_h += 6.28318548F;
       }
 
       /* End of Switch: '<S53>/Switch1' */
@@ -1555,7 +1579,7 @@ void QS_InnerRateLoopModelClass::step()
 
     /* End of Switch: '<S53>/Switch' */
   } else {
-    rtb_Product_cw = 0.0F;
+    rtb_Product_h = 0.0F;
   }
 
   /* End of Switch: '<S26>/Switch1' */
@@ -1563,10 +1587,12 @@ void QS_InnerRateLoopModelClass::step()
   /* Product: '<S54>/Product' incorporates:
    *  Lookup_n-D: '<S54>/1-D Lookup Table2'
    */
-  rtb_Product_ear = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_au) * rtb_Product_cw;
+  rtb_Product_jw = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+    QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_au) * rtb_Product_h;
 
-  /* Lookup_n-D: '<S56>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S56>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Sum: '<S26>/Sum5' incorporates:
@@ -1576,17 +1602,21 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S56>/Product'
    *  Sum: '<S26>/Sum3'
    */
-  rtb_Product_cw = (rtb_Switch2_cz - QS_InnerRateLoop_U.r_rps) *
+  rtb_Product_h = (rtb_Switch2_cz - QS_InnerRateLoop_U.r_rps) *
     intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
                       QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_c0) +
-    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_l + rtb_Product_ear);
+    (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_l + rtb_Product_jw);
 
-  /* Lookup_n-D: '<S26>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S26>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-  rtb_Sum1_gw = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+  rtb_Sum1_me = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_h);
 
-  /* Lookup_n-D: '<S26>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S26>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_Abs_k = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData_f);
@@ -1596,7 +1626,7 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hv;
 
   /* Sum: '<S5>/Sum' */
-  rtb_Product_hg[0] = rtb_Product_of;
+  rtb_Product_j[0] = rtb_Product_dc;
 
   /* Gain: '<S31>/derivative cutoff frequency 1' incorporates:
    *  DiscreteIntegrator: '<S31>/Discrete-Time Integrator'
@@ -1611,7 +1641,7 @@ void QS_InnerRateLoopModelClass::step()
   /* Sum: '<S5>/Sum' incorporates:
    *  Gain: '<S31>/derivative cutoff frequency 1'
    */
-  rtb_Product_hg[1] = rtb_Product_b_tmp;
+  rtb_Product_j[1] = rtb_Product_b_tmp;
 
   /* Sum: '<S25>/Sum3' incorporates:
    *  DiscreteIntegrator: '<S47>/Discrete-Time Integrator'
@@ -1620,14 +1650,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Gain: '<S47>/derivative cutoff frequency 1'
    *  Sum: '<S47>/Sum1'
    */
-  rtb_Product_b_tmp_0 = (rtb_Compare_k -
+  rtb_Product_b_tmp_0 = (rtb_derivativecutofffrequency_p -
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mk) * 100.0F;
 
   /* Sum: '<S5>/Sum' incorporates:
    *  Gain: '<S47>/derivative cutoff frequency 1'
    *  Sum: '<S25>/Sum3'
    */
-  rtb_Product_hg[2] = rtb_Product_b_tmp_0;
+  rtb_Product_j[2] = rtb_Product_b_tmp_0;
 
   /* Gain: '<S57>/derivative cutoff frequency 1' incorporates:
    *  DiscreteIntegrator: '<S57>/Discrete-Time Integrator'
@@ -1648,39 +1678,64 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S41>/Product1'
    *  Product: '<S50>/Product1'
    *  Product: '<S61>/Product1'
-   *  Product: '<S64>/Product'
    *  Sum: '<S34>/Sum1'
    *  Sum: '<S41>/Sum1'
    *  Sum: '<S50>/Sum1'
    *  Sum: '<S61>/Sum1'
    */
-  rtb_Product_hg[3] = rtb_Switch2_cz;
+  rtb_Product_j[3] = rtb_Switch2_cz;
   rtb_Sum1_f[0] = rtb_Sum1_c0 * rtb_uDLookupTable_cs / rtb_uDLookupTable1 +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_c4;
-  rtb_Sum1_f[1] = rtb_Sum1_fe * rtb_uDLookupTable / rtb_uDLookupTable1_p +
+  rtb_Sum1_f[1] = rtb_Sum1_l4 * rtb_uDLookupTable / rtb_uDLookupTable1_p +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_bw;
-  rtb_Sum1_f[2] = rtb_uDLookupTable2_bw * rtb_Saturation_k /
-    rtb_uDLookupTable1_l + QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_di;
-  rtb_Sum1_f[3] = rtb_Product_cw * rtb_Sum1_gw / rtb_Abs_k +
+  rtb_Sum1_f[2] = rtb_uDLookupTable2_n * rtb_Saturation_k / rtb_uDLookupTable1_l
+    + QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_di;
+  rtb_Sum1_f[3] = rtb_Product_h * rtb_Sum1_me / rtb_Abs_k +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hv;
+
+  /* SignalConversion generated from: '<S64>/Product' incorporates:
+   *  Inport: '<Root>/p_rps'
+   *  Inport: '<Root>/phi_rad'
+   *  Inport: '<Root>/psi_rad'
+   *  Inport: '<Root>/q_rps'
+   *  Inport: '<Root>/r_rps'
+   *  Inport: '<Root>/theta_rad'
+   */
+  rtb_Add5_1[3] = QS_InnerRateLoop_U.p_rps;
+  rtb_Add5_1[4] = QS_InnerRateLoop_U.q_rps;
+  rtb_Add5_1[5] = QS_InnerRateLoop_U.r_rps;
+  rtb_Add5_1[6] = QS_InnerRateLoop_U.phi_rad;
+  rtb_Add5_1[7] = QS_InnerRateLoop_U.theta_rad;
+  rtb_Add5_1[8] = QS_InnerRateLoop_U.psi_rad;
+
+  /* Sum: '<S5>/Sum' incorporates:
+   *  Lookup_n-D: '<S64>/1-D Lookup Table2'
+   *  Product: '<S64>/Product'
+   */
   for (iU = 0; iU < 4; iU++) {
-    tmp = 0.0F;
-    tmp_0 = 0;
+    rtb_Sum1_j_idx_0 = 0.0F;
+    tmp = 0;
     for (i = 0; i < 9; i++) {
-      tmp += rtb_uDLookupTable2[tmp_0 + iU] * rtb_TmpSignalConversionAtProduc[i];
-      tmp_0 += 4;
+      rtb_Sum1_j_idx_0 += rtb_uDLookupTable2[tmp + iU] * rtb_Add5_1[i];
+      tmp += 4;
     }
 
-    rtb_Product_b[iU] = (rtb_Product_hg[iU] + rtb_Sum1_f[iU]) - tmp;
+    rtb_Product_b_0[iU] = (rtb_Product_j[iU] + rtb_Sum1_f[iU]) -
+      rtb_Sum1_j_idx_0;
   }
 
-  /* Product: '<S63>/Product' */
+  /* Product: '<S63>/Product' incorporates:
+   *  Lookup_n-D: '<S63>/1-D Lookup Table2'
+   */
+  rtb_Abs_i = rtb_Product_b_0[1];
+  rtb_Add5 = rtb_Product_b_0[0];
+  rtb_DeadZone3 = rtb_Product_b_0[2];
+  rtb_Add6 = rtb_Product_b_0[3];
   for (iU = 0; iU < 4; iU++) {
-    rtb_Product_hg[iU] = 0.0F;
-    rtb_Product_hg[iU] += rtb_uDLookupTable2_k5[iU] * rtb_Product_b[0];
-    rtb_Product_hg[iU] += rtb_uDLookupTable2_k5[iU + 4] * rtb_Product_b[1];
-    rtb_Product_hg[iU] += rtb_uDLookupTable2_k5[iU + 8] * rtb_Product_b[2];
-    rtb_Product_hg[iU] += rtb_uDLookupTable2_k5[iU + 12] * rtb_Product_b[3];
+    rtb_Product_j[iU] = ((rtb_uDLookupTable2_k5[iU + 4] * rtb_Abs_i +
+                          rtb_uDLookupTable2_k5[iU] * rtb_Add5) +
+                         rtb_uDLookupTable2_k5[iU + 8] * rtb_DeadZone3) +
+      rtb_uDLookupTable2_k5[iU + 12] * rtb_Add6;
   }
 
   /* End of Product: '<S63>/Product' */
@@ -1688,19 +1743,18 @@ void QS_InnerRateLoopModelClass::step()
   /* Outputs for Enabled SubSystem: '<Root>/Enabled Subsystem Grab and Freeze Value Upon Engagement' incorporates:
    *  EnablePort: '<S6>/Enable'
    */
-  /* Logic: '<Root>/Logical Operator' incorporates:
-   *  Inport: '<Root>/engage'
-   */
-  if (!QS_InnerRateLoop_U.engage) {
+  if (tmp_0) {
     /* Saturate: '<Root>/Saturation' incorporates:
      *  Inport: '<Root>/mixer_in_throttle'
-     *  Inport: '<S6>/In1'
      */
     if (QS_InnerRateLoop_U.mixer_in_throttle > 2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[0] = 2.0F;
     } else if (QS_InnerRateLoop_U.mixer_in_throttle < -1.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[0] = -1.0F;
     } else {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[0] = QS_InnerRateLoop_U.mixer_in_throttle;
     }
 
@@ -1708,13 +1762,15 @@ void QS_InnerRateLoopModelClass::step()
 
     /* Saturate: '<Root>/Saturation1' incorporates:
      *  Inport: '<Root>/mixer_in_y'
-     *  Inport: '<S6>/In1'
      */
     if (QS_InnerRateLoop_U.mixer_in_y > 2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[1] = 2.0F;
     } else if (QS_InnerRateLoop_U.mixer_in_y < -2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[1] = -2.0F;
     } else {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[1] = QS_InnerRateLoop_U.mixer_in_y;
     }
 
@@ -1722,13 +1778,15 @@ void QS_InnerRateLoopModelClass::step()
 
     /* Saturate: '<Root>/Saturation2' incorporates:
      *  Inport: '<Root>/mixer_in_x'
-     *  Inport: '<S6>/In1'
      */
     if (QS_InnerRateLoop_U.mixer_in_x > 2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[2] = 2.0F;
     } else if (QS_InnerRateLoop_U.mixer_in_x < -2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[2] = -2.0F;
     } else {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[2] = QS_InnerRateLoop_U.mixer_in_x;
     }
 
@@ -1736,71 +1794,69 @@ void QS_InnerRateLoopModelClass::step()
 
     /* Saturate: '<Root>/Saturation3' incorporates:
      *  Inport: '<Root>/mixer_in_z'
-     *  Inport: '<S6>/In1'
      */
     if (QS_InnerRateLoop_U.mixer_in_z > 2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[3] = 2.0F;
     } else if (QS_InnerRateLoop_U.mixer_in_z < -2.0F) {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[3] = -2.0F;
     } else {
+      /* SignalConversion generated from: '<S6>/In1' */
       QS_InnerRateLoop_B.In1[3] = QS_InnerRateLoop_U.mixer_in_z;
     }
 
     /* End of Saturate: '<Root>/Saturation3' */
   }
 
-  /* End of Logic: '<Root>/Logical Operator' */
   /* End of Outputs for SubSystem: '<Root>/Enabled Subsystem Grab and Freeze Value Upon Engagement' */
 
   /* DiscreteIntegrator: '<S65>/Discrete-Time Integrator' */
-  rtb_DiscreteTimeIntegrator_fi =
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_co;
+  rtb_Add5 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_co;
 
   /* Sum: '<S65>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S65>/Discrete-Time Integrator'
    *  Gain: '<S65>/Gain'
    */
-  rtb_DeadZone3 = 6.66666651F * rtb_Product_hg[0] +
+  rtb_DeadZone3 = 6.66666651F * rtb_Product_j[0] +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_co;
 
   /* DiscreteIntegrator: '<S66>/Discrete-Time Integrator' */
-  rtb_DiscreteTimeIntegrator_k1 =
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_i;
+  rtb_Add6 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_i;
 
   /* Sum: '<S66>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S66>/Discrete-Time Integrator'
    *  Gain: '<S66>/Gain'
    */
-  rtb_uDLookupTable_a = 6.66666651F * rtb_Product_hg[1] +
+  rtb_uDLookupTable_a = 6.66666651F * rtb_Product_j[1] +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_i;
 
   /* DiscreteIntegrator: '<S67>/Discrete-Time Integrator' */
-  rtb_DiscreteTimeIntegrator_h =
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_ch;
+  rtb_Add7 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_ch;
 
   /* Sum: '<S67>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S67>/Discrete-Time Integrator'
    *  Gain: '<S67>/Gain'
    */
-  rtb_Sum1_lq = 6.66666651F * rtb_Product_hg[2] +
+  rtb_Sum1_al = 6.66666651F * rtb_Product_j[2] +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_ch;
 
   /* DiscreteIntegrator: '<S68>/Discrete-Time Integrator' */
-  rtb_DiscreteTimeIntegrator_n =
+  rtb_DiscreteTimeIntegrator_jt =
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_a5;
 
   /* Sum: '<S68>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S68>/Discrete-Time Integrator'
    *  Gain: '<S68>/Gain'
    */
-  rtb_Sum1_gg = 0.364F * rtb_Product_hg[3] +
+  rtb_Sum1_b = 0.364F * rtb_Product_j[3] +
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_a5;
 
   /* Sum: '<Root>/Sum1' */
   rtb_Sum1_j_idx_0 = QS_InnerRateLoop_B.In1[0] + rtb_DeadZone3;
   rtb_Sum1_j_idx_1 = QS_InnerRateLoop_B.In1[1] + rtb_uDLookupTable_a;
-  rtb_Sum1_j_idx_2 = QS_InnerRateLoop_B.In1[2] + rtb_Sum1_lq;
-  rtb_TrigonometricFunction3 = QS_InnerRateLoop_B.In1[3] + rtb_Sum1_gg;
+  rtb_Sum1_j_idx_2 = QS_InnerRateLoop_B.In1[2] + rtb_Sum1_al;
+  rtb_Sum1_j_idx_3 = QS_InnerRateLoop_B.In1[3] + rtb_Sum1_b;
 
   /* Saturate: '<Root>/Saturation4' */
   if (rtb_Sum1_j_idx_0 > 0.9F) {
@@ -1816,11 +1872,11 @@ void QS_InnerRateLoopModelClass::step()
   /* Outport: '<Root>/mixer_throttle' */
   QS_InnerRateLoop_Y.mixer_throttle = rtb_Abs_i;
 
-  /* Sum: '<S14>/Sum' */
-  rtb_Abs_i = rtb_Sum1_j_idx_0 - rtb_Abs_i;
-
-  /* Abs: '<S14>/Abs' */
-  rtb_Abs_i = static_cast<real32_T>(fabs((real_T)rtb_Abs_i));
+  /* Abs: '<S14>/Abs' incorporates:
+   *  Sum: '<S14>/Sum'
+   */
+  rtb_Abs_i = static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Sum1_j_idx_0 -
+    rtb_Abs_i)));
 
   /* Switch: '<S40>/Switch' incorporates:
    *  Constant: '<S115>/Constant'
@@ -1830,12 +1886,14 @@ void QS_InnerRateLoopModelClass::step()
    *  RelationalOperator: '<S115>/Compare'
    */
   if (rtb_Abs_i > 0.0F) {
-    rtb_Product_ib = 0.0F;
+    rtb_Product_o = 0.0F;
   } else {
-    /* Lookup_n-D: '<S38>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S38>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_Product_ib *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-      QS_InnerRateLoop_ConstP.pooled8);
+    rtb_Product_o *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData);
   }
 
   /* End of Switch: '<S40>/Switch' */
@@ -1854,11 +1912,11 @@ void QS_InnerRateLoopModelClass::step()
   /* Outport: '<Root>/mixer_x' */
   QS_InnerRateLoop_Y.mixer_x = rtb_Abs_i;
 
-  /* Sum: '<S15>/Sum' */
-  rtb_Abs_i = rtb_Sum1_j_idx_1 - rtb_Abs_i;
-
-  /* Abs: '<S15>/Abs' */
-  rtb_Abs_i = static_cast<real32_T>(fabs((real_T)rtb_Abs_i));
+  /* Abs: '<S15>/Abs' incorporates:
+   *  Sum: '<S15>/Sum'
+   */
+  rtb_Abs_i = static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Sum1_j_idx_1 -
+    rtb_Abs_i)));
 
   /* Switch: '<S33>/Switch' incorporates:
    *  Constant: '<S116>/Constant'
@@ -1868,11 +1926,13 @@ void QS_InnerRateLoopModelClass::step()
    *  RelationalOperator: '<S116>/Compare'
    */
   if (rtb_Abs_i > 0.0F) {
-    rtb_Product_jr = 0.0F;
+    rtb_Product_ke = 0.0F;
   } else {
-    /* Lookup_n-D: '<S29>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S29>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_Product_jr *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+    rtb_Product_ke *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
       QS_InnerRateLoop_ConstP.pooled6);
   }
 
@@ -1892,11 +1952,11 @@ void QS_InnerRateLoopModelClass::step()
   /* Outport: '<Root>/mixer_y' */
   QS_InnerRateLoop_Y.mixer_y = rtb_Abs_i;
 
-  /* Sum: '<S16>/Sum' */
-  rtb_Abs_i = rtb_Sum1_j_idx_2 - rtb_Abs_i;
-
-  /* Abs: '<S16>/Abs' */
-  rtb_Abs_i = static_cast<real32_T>(fabs((real_T)rtb_Abs_i));
+  /* Abs: '<S16>/Abs' incorporates:
+   *  Sum: '<S16>/Sum'
+   */
+  rtb_Abs_i = static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Sum1_j_idx_2 -
+    rtb_Abs_i)));
 
   /* Switch: '<S49>/Switch' incorporates:
    *  Constant: '<S117>/Constant'
@@ -1906,23 +1966,25 @@ void QS_InnerRateLoopModelClass::step()
    *  RelationalOperator: '<S117>/Compare'
    */
   if (rtb_Abs_i > 0.0F) {
-    rtb_Product_n = 0.0F;
+    rtb_Product_p = 0.0F;
   } else {
-    /* Lookup_n-D: '<S45>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S45>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_Product_n *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData);
+    rtb_Product_p *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+      QS_InnerRateLoop_ConstP.pooled6);
   }
 
   /* End of Switch: '<S49>/Switch' */
 
   /* Saturate: '<Root>/Saturation5' */
-  if (rtb_TrigonometricFunction3 > 1.0F) {
+  if (rtb_Sum1_j_idx_3 > 1.0F) {
     rtb_Abs_i = 1.0F;
-  } else if (rtb_TrigonometricFunction3 < -1.0F) {
+  } else if (rtb_Sum1_j_idx_3 < -1.0F) {
     rtb_Abs_i = -1.0F;
   } else {
-    rtb_Abs_i = rtb_TrigonometricFunction3;
+    rtb_Abs_i = rtb_Sum1_j_idx_3;
   }
 
   /* End of Saturate: '<Root>/Saturation5' */
@@ -1930,11 +1992,11 @@ void QS_InnerRateLoopModelClass::step()
   /* Outport: '<Root>/mixer_z' */
   QS_InnerRateLoop_Y.mixer_z = rtb_Abs_i;
 
-  /* Sum: '<S17>/Sum' */
-  rtb_Abs_i -= rtb_TrigonometricFunction3;
-
-  /* Abs: '<S17>/Abs' */
-  rtb_Abs_i = static_cast<real32_T>(fabs((real_T)rtb_Abs_i));
+  /* Abs: '<S17>/Abs' incorporates:
+   *  Sum: '<S17>/Sum'
+   */
+  rtb_Abs_i = static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Abs_i -
+    rtb_Sum1_j_idx_3)));
 
   /* Switch: '<S60>/Switch' incorporates:
    *  Constant: '<S118>/Constant'
@@ -1944,21 +2006,23 @@ void QS_InnerRateLoopModelClass::step()
    *  RelationalOperator: '<S118>/Compare'
    */
   if (rtb_Abs_i > 0.0F) {
-    rtb_Product_ear = 0.0F;
+    rtb_Product_jw = 0.0F;
   } else {
-    /* Lookup_n-D: '<S55>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S55>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_Product_ear *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-      QS_InnerRateLoop_ConstP.pooled6);
+    rtb_Product_jw *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_c);
   }
 
   /* End of Switch: '<S60>/Switch' */
 
   /* Outport: '<Root>/yaw_sweep' */
-  QS_InnerRateLoop_Y.yaw_sweep = rtb_Sum1_gg;
+  QS_InnerRateLoop_Y.yaw_sweep = rtb_Sum1_b;
 
   /* Outport: '<Root>/pitch_sweep' */
-  QS_InnerRateLoop_Y.pitch_sweep = rtb_Sum1_lq;
+  QS_InnerRateLoop_Y.pitch_sweep = rtb_Sum1_al;
 
   /* Outport: '<Root>/roll_sweep' */
   QS_InnerRateLoop_Y.roll_sweep = rtb_uDLookupTable_a;
@@ -1972,14 +2036,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S61>/Sum2'
    *  UnitDelay: '<S61>/Unit Delay'
    */
-  rtb_Sum1_lq = ((rtb_Abs_k - rtb_Sum1_gw) * rtb_Product_cw / rtb_Abs_k -
-                 QS_InnerRateLoop_DW.UnitDelay_DSTATE_o) * rtb_Sum1_gw;
+  rtb_Sum1_al = ((rtb_Abs_k - rtb_Sum1_me) * rtb_Product_h / rtb_Abs_k -
+                 QS_InnerRateLoop_DW.UnitDelay_DSTATE_o) * rtb_Sum1_me;
 
   /* Product: '<S50>/Product2' incorporates:
    *  Sum: '<S50>/Sum2'
    */
-  rtb_Sum1_gg = (rtb_uDLookupTable1_l - rtb_Saturation_k) *
-    rtb_uDLookupTable2_bw / rtb_uDLookupTable1_l;
+  rtb_Sum1_b = (rtb_uDLookupTable1_l - rtb_Saturation_k) * rtb_uDLookupTable2_n /
+    rtb_uDLookupTable1_l;
 
   /* Outport: '<Root>/vz_cmd' incorporates:
    *  DiscreteIntegrator: '<S39>/Discrete-Time Integrator'
@@ -2005,21 +2069,22 @@ void QS_InnerRateLoopModelClass::step()
   QS_InnerRateLoop_Y.psi_cmd = rtb_Switch3;
 
   /* Trigonometry: '<S71>/Trigonometric Function3' */
-  rtb_DeadZone3 = static_cast<real32_T>(cos((real_T)rtb_uDLookupTable3));
+  rtb_DeadZone3 = static_cast<real32_T>(cos(static_cast<real_T>
+    (rtb_uDLookupTable3)));
 
   /* Trigonometry: '<S71>/Trigonometric Function6' */
-  rtb_Abs_k = static_cast<real32_T>(sin((real_T)rtb_uDLookupTable3));
+  rtb_Abs_k = static_cast<real32_T>(sin(static_cast<real_T>(rtb_uDLookupTable3)));
 
   /* Product: '<S71>/Divide4' incorporates:
    *  Product: '<S71>/Divide9'
    */
-  rtb_Abs_i = QS_InnerRateLoop_ConstB.TrigonometricFunction1_m *
+  rtb_Product_h = QS_InnerRateLoop_ConstB.TrigonometricFunction1_m *
     QS_InnerRateLoop_ConstB.TrigonometricFunction5_f;
 
   /* Product: '<S71>/Divide1' incorporates:
    *  Product: '<S71>/Divide7'
    */
-  rtb_Product_cw = QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
+  rtb_uDLookupTable1_l = QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
     QS_InnerRateLoop_ConstB.TrigonometricFunction5_f;
 
   /* Sum: '<S71>/Add5' incorporates:
@@ -2033,15 +2098,16 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S71>/Add1'
    *  Sum: '<S71>/Add2'
    */
-  rtb_Sum1_j_idx_0 = ((rtb_Abs_i * rtb_DeadZone3 +
-                       QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
-                       rtb_Abs_k) * rtb_Add7_d + (rtb_Product_cw * rtb_DeadZone3
-    - QS_InnerRateLoop_ConstB.TrigonometricFunction1_m * rtb_Abs_k) * rtb_Add6_a)
-    + QS_InnerRateLoop_ConstB.TrigonometricFunction2_ag * rtb_DeadZone3 *
-    rtb_Add5_ky;
+  rtb_Sum1_j_idx_1 = ((rtb_Product_h * rtb_DeadZone3 +
+                       QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
+                       rtb_Abs_k) * rtb_Add7_f2 + (rtb_uDLookupTable1_l *
+    rtb_DeadZone3 - QS_InnerRateLoop_ConstB.TrigonometricFunction1_m * rtb_Abs_k)
+                      * rtb_Add6_m) +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_DeadZone3 *
+    rtb_Add5_l;
 
   /* Outport: '<Root>/Vnorth_cmd' */
-  QS_InnerRateLoop_Y.Vnorth_cmd = rtb_Sum1_j_idx_0;
+  QS_InnerRateLoop_Y.Vnorth_cmd = rtb_Sum1_j_idx_1;
 
   /* Sum: '<S71>/Add6' incorporates:
    *  Product: '<S71>/Divide10'
@@ -2054,29 +2120,29 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S71>/Add3'
    *  Sum: '<S71>/Add4'
    */
-  rtb_Sum1_j_idx_1 = ((rtb_Abs_i * rtb_Abs_k -
-                       QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
-                       rtb_DeadZone3) * rtb_Add7_d + (rtb_Product_cw * rtb_Abs_k
-    + QS_InnerRateLoop_ConstB.TrigonometricFunction1_m * rtb_DeadZone3) *
-                      rtb_Add6_a) +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction2_ag * rtb_Abs_k * rtb_Add5_ky;
+  rtb_Sum1_j_idx_2 = ((rtb_Product_h * rtb_Abs_k -
+                       QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
+                       rtb_DeadZone3) * rtb_Add7_f2 + (rtb_uDLookupTable1_l *
+    rtb_Abs_k + QS_InnerRateLoop_ConstB.TrigonometricFunction1_m * rtb_DeadZone3)
+                      * rtb_Add6_m) +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_Abs_k * rtb_Add5_l;
 
   /* Outport: '<Root>/Veast_cmd' */
-  QS_InnerRateLoop_Y.Veast_cmd = rtb_Sum1_j_idx_1;
+  QS_InnerRateLoop_Y.Veast_cmd = rtb_Sum1_j_idx_2;
 
   /* Sum: '<S71>/Add7' incorporates:
    *  Product: '<S71>/Divide11'
    *  Product: '<S71>/Divide12'
    *  Product: '<S71>/Divide2'
    */
-  rtb_Add7_d = (QS_InnerRateLoop_ConstB.TrigonometricFunction1_m *
-                QS_InnerRateLoop_ConstB.TrigonometricFunction2_ag * rtb_Add7_d +
-                QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
-                QS_InnerRateLoop_ConstB.TrigonometricFunction2_ag * rtb_Add6_a)
-    + -QS_InnerRateLoop_ConstB.TrigonometricFunction5_f * rtb_Add5_ky;
+  rtb_Add7_f2 = (QS_InnerRateLoop_ConstB.TrigonometricFunction1_m *
+                 QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_Add7_f2
+                 + QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
+                 QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_Add6_m)
+    + -QS_InnerRateLoop_ConstB.TrigonometricFunction5_f * rtb_Add5_l;
 
   /* Outport: '<Root>/Vdown_cmd' */
-  QS_InnerRateLoop_Y.Vdown_cmd = rtb_Add7_d;
+  QS_InnerRateLoop_Y.Vdown_cmd = rtb_Add7_f2;
 
   /* Outport: '<Root>/vehheadingcmd' */
   QS_InnerRateLoop_Y.vehheadingcmd = rtb_Sum4_a;
@@ -2087,15 +2153,9 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = 0.0F;
   }
 
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n >= 0.0174520072F) {
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = 0.0174520072F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n <= -0.0174520072F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = -0.0174520072F;
-    }
-  }
-
-  /* Lookup_n-D: '<S82>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S82>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Product: '<S82>/Product' incorporates:
@@ -2107,12 +2167,13 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S74>/Sum'
    *  Sum: '<S74>/Sum4'
    */
-  rtb_uDLookupTable1_l = ((((QS_InnerRateLoop_ConstB.TrigonometricFunction2_a *
-    rtb_TrigonometricFunction6 * rtb_Saturation_h +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_uDLookupTable_l_tmp *
+  rtb_uDLookupTable1_l = ((((QS_InnerRateLoop_ConstB.TrigonometricFunction2_ak *
+    rtb_DiscreteTimeIntegrator_n * rtb_Saturation_h +
+    QS_InnerRateLoop_ConstB.TrigonometricFunction2_ak * rtb_Product_b *
     rtb_Saturation1_p) + -QS_InnerRateLoop_ConstB.TrigonometricFunction5_j *
-    rtb_Saturation2_h) + rtb_Add5_ky) - rtb_Add5_e) * intrp1d_fu32fl_pw(bpIdx,
-    rtb_Abs_i, QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_kg);
+    rtb_DiscreteTimeIntegrator_h) + rtb_Add5_l) - rtb_Add5_e) *
+    intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+                      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_kg);
 
   /* Sum: '<S74>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S84>/Discrete-Time Integrator'
@@ -2120,14 +2181,18 @@ void QS_InnerRateLoopModelClass::step()
   rtb_DeadZone3 = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n +
     rtb_uDLookupTable1_l;
 
-  /* Lookup_n-D: '<S74>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S74>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_Abs_k = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_d);
 
-  /* Lookup_n-D: '<S74>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S74>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-  rtb_Product_cw = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+  rtb_Product_h = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData_m);
 
   /* DiscreteIntegrator: '<S85>/Discrete-Time Integrator' */
@@ -2138,19 +2203,19 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S85>/Product1'
    *  Sum: '<S85>/Sum1'
    */
-  rtb_Abs_i = -(rtb_DeadZone3 * rtb_Abs_k / rtb_Product_cw +
+  rtb_Abs_i = -(rtb_DeadZone3 * rtb_Abs_k / rtb_Product_h +
                 QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_g);
 
   /* Sum: '<S13>/Sum' */
-  rtb_Sum1_gw = rtb_Abs_i + rtb_derivativecutofffrequency_b;
+  rtb_Sum1_me = rtb_Abs_i + rtb_derivativecutofffrequency_b;
 
   /* Saturate: '<S13>/Saturation4' */
-  if (rtb_Sum1_gw > 0.610820234F) {
-    rtb_Sum1_j_idx_2 = 0.610820234F;
-  } else if (rtb_Sum1_gw < -0.610820234F) {
-    rtb_Sum1_j_idx_2 = -0.610820234F;
+  if (rtb_Sum1_me > 0.610820234F) {
+    rtb_Sum1_j_idx_3 = 0.610820234F;
+  } else if (rtb_Sum1_me < -0.610820234F) {
+    rtb_Sum1_j_idx_3 = -0.610820234F;
   } else {
-    rtb_Sum1_j_idx_2 = rtb_Sum1_gw;
+    rtb_Sum1_j_idx_3 = rtb_Sum1_me;
   }
 
   /* End of Saturate: '<S13>/Saturation4' */
@@ -2168,15 +2233,13 @@ void QS_InnerRateLoopModelClass::step()
       /* Saturate: '<S13>/Saturation5' */
       if (rtb_Abs_i > 0.261780113F) {
         rtb_Abs_i = 0.261780113F;
-      } else {
-        if (rtb_Abs_i < -0.261780113F) {
-          rtb_Abs_i = -0.261780113F;
-        }
+      } else if (rtb_Abs_i < -0.261780113F) {
+        rtb_Abs_i = -0.261780113F;
       }
 
       /* End of Saturate: '<S13>/Saturation5' */
     } else {
-      rtb_Abs_i = rtb_Sum1_j_idx_2 - rtb_derivativecutofffrequency_b;
+      rtb_Abs_i = rtb_Sum1_j_idx_3 - rtb_derivativecutofffrequency_b;
     }
 
     /* End of Switch: '<S13>/Switch2' */
@@ -2185,18 +2248,18 @@ void QS_InnerRateLoopModelClass::step()
       /* DeadZone: '<S13>/Dead Zone2' incorporates:
        *  Inport: '<Root>/input_lon'
        */
-      tmp = QS_InnerRateLoop_U.input_lon - 0.05F;
+      rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_lon - 0.05F;
     } else if (QS_InnerRateLoop_U.input_lon >= -0.05F) {
       /* DeadZone: '<S13>/Dead Zone2' */
-      tmp = 0.0F;
+      rtb_Sum1_j_idx_0 = 0.0F;
     } else {
       /* DeadZone: '<S13>/Dead Zone2' incorporates:
        *  Inport: '<Root>/input_lon'
        */
-      tmp = QS_InnerRateLoop_U.input_lon - -0.05F;
+      rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_lon - -0.05F;
     }
 
-    rtb_Abs_i = 0.785340309F * tmp;
+    rtb_Abs_i = 0.785340309F * rtb_Sum1_j_idx_0;
   }
 
   /* End of Switch: '<S106>/Switch' */
@@ -2218,27 +2281,31 @@ void QS_InnerRateLoopModelClass::step()
 
   /* Saturate: '<S106>/Saturation' */
   if (rtb_uDLookupTable_a > 0.0025F) {
-    rtb_Sum4_a = 0.0025F;
+    rtb_Sum1_j_idx_0 = 0.0025F;
   } else if (rtb_uDLookupTable_a < -0.0025F) {
-    rtb_Sum4_a = -0.0025F;
+    rtb_Sum1_j_idx_0 = -0.0025F;
   } else {
-    rtb_Sum4_a = rtb_uDLookupTable_a;
+    rtb_Sum1_j_idx_0 = rtb_uDLookupTable_a;
   }
 
-  /* End of Saturate: '<S106>/Saturation' */
-
-  /* Sum: '<S106>/Sum' */
-  rtb_derivativecutofffrequency_b = rtb_uDLookupTable_a - rtb_Sum4_a;
+  /* Sum: '<S106>/Sum' incorporates:
+   *  Saturate: '<S106>/Saturation'
+   */
+  rtb_derivativecutofffrequency_b = rtb_uDLookupTable_a - rtb_Sum1_j_idx_0;
 
   /* Sum: '<S106>/Sum2' */
   rtb_Sum4_a = rtb_Abs_i + rtb_derivativecutofffrequency_b;
 
-  /* Lookup_n-D: '<S51>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S51>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
-  /* Lookup_n-D: '<S52>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S52>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx_0 = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U,
-    &rtb_uDLookupTable2_bw);
+    &rtb_uDLookupTable2_n);
 
   /* Product: '<S52>/Product' incorporates:
    *  Lookup_n-D: '<S51>/1-D Lookup Table2'
@@ -2249,23 +2316,19 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S48>/Unit Delay'
    *  UnitDelay: '<S48>/Unit Delay1'
    */
-  rtb_Add5_ky = ((rtb_Sum4_a - QS_InnerRateLoop_DW.UnitDelay1_DSTATE_c) *
-                 intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_or) -
-                 QS_InnerRateLoop_DW.UnitDelay_DSTATE_j) * intrp1d_fu32fl_pw
-    (bpIdx_0, rtb_uDLookupTable2_bw,
-     QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_gp);
-
-  /* Sum: '<S111>/Sum' */
-  rtb_Sum1_gw = rtb_Sum1_j_idx_2 - rtb_Sum1_gw;
-
-  /* Abs: '<S111>/Abs' */
-  rtb_Sum1_gw = static_cast<real32_T>(fabs((real_T)rtb_Sum1_gw));
+  rtb_Add5_l = ((rtb_Sum4_a - QS_InnerRateLoop_DW.UnitDelay1_DSTATE_c) *
+                intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+    QS_InnerRateLoop_ConstP.pooled40) - QS_InnerRateLoop_DW.UnitDelay_DSTATE_j) *
+    intrp1d_fu32fl_pw(bpIdx_0, rtb_uDLookupTable2_n,
+                      QS_InnerRateLoop_ConstP.pooled41);
 
   /* RelationalOperator: '<S114>/Compare' incorporates:
+   *  Abs: '<S111>/Abs'
    *  Constant: '<S114>/Constant'
+   *  Sum: '<S111>/Sum'
    */
-  rtb_Compare_nh = (rtb_Sum1_gw > 0.0F);
+  rtb_Compare_nh = (static_cast<real32_T>(fabs(static_cast<real_T>
+    (rtb_Sum1_j_idx_3 - rtb_Sum1_me))) > 0.0F);
 
   /* Switch: '<S84>/Switch' incorporates:
    *  Constant: '<S84>/Constant'
@@ -2273,12 +2336,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S83>/Product'
    */
   if (rtb_Compare_nh) {
-    rtb_Sum1_j_idx_2 = 0.0F;
+    rtb_Sum1_j_idx_3 = 0.0F;
   } else {
-    /* Lookup_n-D: '<S83>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S83>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evenxg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_Sum1_j_idx_2 = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_f) * rtb_uDLookupTable1_l;
+    rtb_Sum1_j_idx_3 = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+      QS_InnerRateLoop_ConstP.pooled12) * rtb_uDLookupTable1_l;
   }
 
   /* End of Switch: '<S84>/Switch' */
@@ -2289,21 +2354,15 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = 0.0F;
   }
 
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf >= 0.0174520072F) {
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = 0.0174520072F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf <= -0.0174520072F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = -0.0174520072F;
-    }
-  }
-
-  /* Lookup_n-D: '<S78>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S78>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Product: '<S72>/Divide1' incorporates:
    *  Product: '<S72>/Divide7'
    */
-  rtb_uDLookupTable1_l = QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
+  rtb_uDLookupTable1_l = QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
     QS_InnerRateLoop_ConstB.TrigonometricFunction5_j;
 
   /* Product: '<S78>/Product' incorporates:
@@ -2321,68 +2380,74 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S73>/Sum'
    *  Sum: '<S73>/Sum4'
    */
-  rtb_TrigonometricFunction6 = (((((rtb_uDLookupTable1_l *
-    rtb_TrigonometricFunction6 -
-    QS_InnerRateLoop_ConstB.TrigonometricFunction1_g * rtb_uDLookupTable_l_tmp) *
-    rtb_Saturation_h + (rtb_uDLookupTable1_l * rtb_uDLookupTable_l_tmp +
-                        QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
-                        rtb_TrigonometricFunction6) * rtb_Saturation1_p) +
-    QS_InnerRateLoop_ConstB.TrigonometricFunction4_k *
-    QS_InnerRateLoop_ConstB.TrigonometricFunction2_a * rtb_Saturation2_h) +
-    rtb_Add6_a) - rtb_Add6_i) * intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-    QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_n);
+  rtb_Product_b = (((((rtb_uDLookupTable1_l * rtb_DiscreteTimeIntegrator_n -
+                       QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
+                       rtb_Product_b) * rtb_Saturation_h + (rtb_uDLookupTable1_l
+    * rtb_Product_b + QS_InnerRateLoop_ConstB.TrigonometricFunction1_g *
+    rtb_DiscreteTimeIntegrator_n) * rtb_Saturation1_p) +
+                     QS_InnerRateLoop_ConstB.TrigonometricFunction4_km *
+                     QS_InnerRateLoop_ConstB.TrigonometricFunction2_ak *
+                     rtb_DiscreteTimeIntegrator_h) + rtb_Add6_m) - rtb_Add6_i) *
+    intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+                      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_n);
 
   /* Sum: '<S73>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S80>/Discrete-Time Integrator'
    */
-  rtb_Sum1_gw = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf +
-    rtb_TrigonometricFunction6;
+  rtb_Sum1_me = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf +
+    rtb_Product_b;
 
-  /* Lookup_n-D: '<S73>/1-D Lookup Table' */
+  /* Lookup_n-D: '<S73>/1-D Lookup Table' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable_a = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable_tableData_hs);
 
-  /* Lookup_n-D: '<S73>/1-D Lookup Table1' */
+  /* Lookup_n-D: '<S73>/1-D Lookup Table1' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
   rtb_uDLookupTable1_l = intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
     QS_InnerRateLoop_ConstP.uDLookupTable1_tableData_p);
 
   /* DiscreteIntegrator: '<S81>/Discrete-Time Integrator' */
-  rtb_Add6_i = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc;
+  rtb_DiscreteTimeIntegrator_n =
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc;
 
   /* Sum: '<S81>/Sum1' incorporates:
    *  DiscreteIntegrator: '<S81>/Discrete-Time Integrator'
    *  Product: '<S81>/Product1'
    */
-  rtb_TrigonometricFunction3 = rtb_Sum1_gw * rtb_uDLookupTable_a /
-    rtb_uDLookupTable1_l + QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc;
+  rtb_Add6_i = rtb_Sum1_me * rtb_uDLookupTable_a / rtb_uDLookupTable1_l +
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc;
 
   /* Sum: '<S13>/Sum3' */
-  rtb_uDLookupTable2_bw = rtb_TrigonometricFunction3 + rtb_Gain1;
+  rtb_uDLookupTable2_n = rtb_Add6_i + rtb_Gain1;
 
   /* Saturate: '<S13>/Saturation1' */
-  if (rtb_uDLookupTable2_bw > 0.610820234F) {
-    rtb_Add6_a = 0.610820234F;
-  } else if (rtb_uDLookupTable2_bw < -0.610820234F) {
-    rtb_Add6_a = -0.610820234F;
+  if (rtb_uDLookupTable2_n > 0.610820234F) {
+    rtb_Add6_m = 0.610820234F;
+  } else if (rtb_uDLookupTable2_n < -0.610820234F) {
+    rtb_Add6_m = -0.610820234F;
   } else {
-    rtb_Add6_a = rtb_uDLookupTable2_bw;
+    rtb_Add6_m = rtb_uDLookupTable2_n;
   }
 
   /* End of Saturate: '<S13>/Saturation1' */
 
-  /* Sum: '<S109>/Sum' */
-  rtb_uDLookupTable2_bw = rtb_Add6_a - rtb_uDLookupTable2_bw;
-
-  /* Abs: '<S109>/Abs' */
-  rtb_uDLookupTable2_bw = static_cast<real32_T>(fabs((real_T)
-    rtb_uDLookupTable2_bw));
-
   /* RelationalOperator: '<S112>/Compare' incorporates:
+   *  Abs: '<S109>/Abs'
    *  Constant: '<S112>/Constant'
+   *  Sum: '<S109>/Sum'
    */
-  rtb_RelationalOperator_b1 = (rtb_uDLookupTable2_bw > 0.0F);
+  rtb_RelationalOperator_k = (static_cast<real32_T>(fabs(static_cast<real_T>
+    (rtb_Add6_m - rtb_uDLookupTable2_n))) > 0.0F);
+
+  /* Logic: '<S76>/Logical Operator' incorporates:
+   *  Logic: '<S77>/Logical Operator'
+   */
+  rtb_Compare_nh = (rtb_Compare_nh || rtb_RelationalOperator_k);
 
   /* Switch: '<S91>/Switch' incorporates:
    *  Constant: '<S91>/Constant'
@@ -2390,10 +2455,12 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S90>/1-D Lookup Table2'
    *  Product: '<S90>/Product'
    */
-  if (rtb_Compare_nh || rtb_RelationalOperator_b1) {
+  if (rtb_Compare_nh) {
     rtb_Product_ng = 0.0F;
   } else {
-    /* Lookup_n-D: '<S90>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S90>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
     rtb_Product_ng *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
       QS_InnerRateLoop_ConstP.pooled13);
@@ -2406,27 +2473,30 @@ void QS_InnerRateLoopModelClass::step()
    *  Lookup_n-D: '<S79>/1-D Lookup Table2'
    *  Product: '<S79>/Product'
    */
-  if (rtb_RelationalOperator_b1) {
-    rtb_TrigonometricFunction6 = 0.0F;
+  if (rtb_RelationalOperator_k) {
+    rtb_Product_b = 0.0F;
   } else {
-    /* Lookup_n-D: '<S79>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S79>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
-    rtb_TrigonometricFunction6 *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
-      QS_InnerRateLoop_ConstP.pooled8);
+    rtb_Product_b *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
+      QS_InnerRateLoop_ConstP.pooled12);
   }
 
   /* End of Switch: '<S80>/Switch' */
 
   /* Switch: '<S94>/Switch' incorporates:
    *  Constant: '<S94>/Constant'
-   *  Logic: '<S77>/Logical Operator'
    *  Lookup_n-D: '<S93>/1-D Lookup Table2'
    *  Product: '<S93>/Product'
    */
-  if (rtb_Compare_nh || rtb_RelationalOperator_b1) {
+  if (rtb_Compare_nh) {
     rtb_Product = 0.0F;
   } else {
-    /* Lookup_n-D: '<S93>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S93>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
     rtb_Product *= intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i,
       QS_InnerRateLoop_ConstP.pooled13);
@@ -2445,17 +2515,17 @@ void QS_InnerRateLoopModelClass::step()
      */
     if (rtb_Compare_bt) {
       /* Saturate: '<S13>/Saturation3' */
-      if (rtb_TrigonometricFunction3 > 0.174520075F) {
+      if (rtb_Add6_i > 0.174520075F) {
         rtb_Abs_i = 0.174520075F;
-      } else if (rtb_TrigonometricFunction3 < -0.174520075F) {
+      } else if (rtb_Add6_i < -0.174520075F) {
         rtb_Abs_i = -0.174520075F;
       } else {
-        rtb_Abs_i = rtb_TrigonometricFunction3;
+        rtb_Abs_i = rtb_Add6_i;
       }
 
       /* End of Saturate: '<S13>/Saturation3' */
     } else {
-      rtb_Abs_i = rtb_Add6_a - rtb_Gain1;
+      rtb_Abs_i = rtb_Add6_m - rtb_Gain1;
     }
 
     /* End of Switch: '<S13>/Switch1' */
@@ -2464,18 +2534,18 @@ void QS_InnerRateLoopModelClass::step()
       /* DeadZone: '<S13>/Dead Zone1' incorporates:
        *  Inport: '<Root>/input_lat'
        */
-      tmp = QS_InnerRateLoop_U.input_lat - 0.05F;
+      rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_lat - 0.05F;
     } else if (QS_InnerRateLoop_U.input_lat >= -0.05F) {
       /* DeadZone: '<S13>/Dead Zone1' */
-      tmp = 0.0F;
+      rtb_Sum1_j_idx_0 = 0.0F;
     } else {
       /* DeadZone: '<S13>/Dead Zone1' incorporates:
        *  Inport: '<Root>/input_lat'
        */
-      tmp = QS_InnerRateLoop_U.input_lat - -0.05F;
+      rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_lat - -0.05F;
     }
 
-    rtb_Abs_i = 0.785340309F * tmp;
+    rtb_Abs_i = 0.785340309F * rtb_Sum1_j_idx_0;
   }
 
   /* End of Switch: '<S107>/Switch' */
@@ -2488,31 +2558,33 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S107>/Unit Delay2'
    */
   if (QS_InnerRateLoop_DW.UnitDelay_DSTATE_j1 == rtb_Compare_m) {
-    rtb_uDLookupTable2_bw = QS_InnerRateLoop_DW.UnitDelay1_DSTATE_fj;
+    rtb_uDLookupTable2_n = QS_InnerRateLoop_DW.UnitDelay1_DSTATE_fj;
   } else {
-    rtb_uDLookupTable2_bw = QS_InnerRateLoop_DW.UnitDelay2_DSTATE_a - rtb_Abs_i;
+    rtb_uDLookupTable2_n = QS_InnerRateLoop_DW.UnitDelay2_DSTATE_a - rtb_Abs_i;
   }
 
   /* End of Switch: '<S107>/Switch1' */
 
   /* Saturate: '<S107>/Saturation' */
-  if (rtb_uDLookupTable2_bw > 0.0025F) {
-    rtb_uDLookupTable_l_tmp = 0.0025F;
-  } else if (rtb_uDLookupTable2_bw < -0.0025F) {
-    rtb_uDLookupTable_l_tmp = -0.0025F;
+  if (rtb_uDLookupTable2_n > 0.0025F) {
+    rtb_Sum1_j_idx_0 = 0.0025F;
+  } else if (rtb_uDLookupTable2_n < -0.0025F) {
+    rtb_Sum1_j_idx_0 = -0.0025F;
   } else {
-    rtb_uDLookupTable_l_tmp = rtb_uDLookupTable2_bw;
+    rtb_Sum1_j_idx_0 = rtb_uDLookupTable2_n;
   }
 
-  /* End of Saturate: '<S107>/Saturation' */
-
-  /* Sum: '<S107>/Sum' */
-  rtb_Gain1 = rtb_uDLookupTable2_bw - rtb_uDLookupTable_l_tmp;
+  /* Sum: '<S107>/Sum' incorporates:
+   *  Saturate: '<S107>/Saturation'
+   */
+  rtb_Gain1 = rtb_uDLookupTable2_n - rtb_Sum1_j_idx_0;
 
   /* Sum: '<S107>/Sum2' */
-  rtb_TrigonometricFunction3 = rtb_Abs_i + rtb_Gain1;
+  rtb_Add6_i = rtb_Abs_i + rtb_Gain1;
 
-  /* Lookup_n-D: '<S35>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S35>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evenxg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Sum: '<S32>/Sum' incorporates:
@@ -2522,12 +2594,13 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S32>/Unit Delay'
    *  UnitDelay: '<S32>/Unit Delay1'
    */
-  rtb_Add6_a = (rtb_TrigonometricFunction3 -
-                QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a) * intrp1d_fu32fl_pw
-    (bpIdx, rtb_Abs_i, QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_ob) -
+  rtb_Add6_m = (rtb_Add6_i - QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a) *
+    intrp1d_fu32fl_pw(bpIdx, rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled40) -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_g;
 
-  /* Lookup_n-D: '<S36>/1-D Lookup Table2' */
+  /* Lookup_n-D: '<S36>/1-D Lookup Table2' incorporates:
+   *  Saturate: '<Root>/Saturation8'
+   */
   bpIdx = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U, &rtb_Abs_i);
 
   /* Sum: '<S85>/Sum' incorporates:
@@ -2535,8 +2608,8 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S85>/Sum2'
    *  UnitDelay: '<S85>/Unit Delay'
    */
-  rtb_Product_cw = (rtb_Product_cw - rtb_Abs_k) * rtb_DeadZone3 / rtb_Product_cw
-    - QS_InnerRateLoop_DW.UnitDelay_DSTATE_oc;
+  rtb_Product_h = (rtb_Product_h - rtb_Abs_k) * rtb_DeadZone3 / rtb_Product_h -
+    QS_InnerRateLoop_DW.UnitDelay_DSTATE_oc;
 
   /* Outport: '<Root>/theta_cmd' */
   QS_InnerRateLoop_Y.theta_cmd = rtb_Sum4_b;
@@ -2544,11 +2617,10 @@ void QS_InnerRateLoopModelClass::step()
   /* Outport: '<Root>/phi_cmd' */
   QS_InnerRateLoop_Y.phi_cmd = rtb_DeadZone;
 
-  /* Sum: '<S110>/Sum' */
-  rtb_Abs -= rtb_Sum2_k;
-
-  /* Abs: '<S110>/Abs' */
-  rtb_Abs = static_cast<real32_T>(fabs((real_T)rtb_Abs));
+  /* Abs: '<S110>/Abs' incorporates:
+   *  Sum: '<S110>/Sum'
+   */
+  rtb_Abs = static_cast<real32_T>(fabs(static_cast<real_T>(rtb_Abs - rtb_Sum2_k)));
 
   /* Switch: '<S88>/Switch' incorporates:
    *  Constant: '<S113>/Constant'
@@ -2560,11 +2632,13 @@ void QS_InnerRateLoopModelClass::step()
   if (rtb_Abs > 0.0F) {
     rtb_Saturation8 = 0.0F;
   } else {
-    /* Lookup_n-D: '<S86>/1-D Lookup Table2' */
+    /* Lookup_n-D: '<S86>/1-D Lookup Table2' incorporates:
+     *  Saturate: '<Root>/Saturation8'
+     */
     bpIdx_0 = plook_u32ff_evencg(rtb_Saturation8, 0.0F, 1.75F, 4U,
-      &rtb_uDLookupTable2_bw);
-    rtb_Saturation8 = intrp1d_fu32fl_pw(bpIdx_0, rtb_uDLookupTable2_bw,
-      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_e) * rtb_Product_ee;
+      &rtb_uDLookupTable2_n);
+    rtb_Saturation8 = intrp1d_fu32fl_pw(bpIdx_0, rtb_uDLookupTable2_n,
+      QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_e) * rtb_Sum_nx;
   }
 
   /* End of Switch: '<S88>/Switch' */
@@ -2572,24 +2646,24 @@ void QS_InnerRateLoopModelClass::step()
   /* RelationalOperator: '<S12>/Relational Operator' incorporates:
    *  Constant: '<S12>/Constant3'
    */
-  rtb_RelationalOperator_b1 = (rtb_Gain2 >= 18.0F);
+  rtb_RelationalOperator_k = (rtb_Gain2 >= 18.0F);
 
   /* Outport: '<Root>/ScoreDisplay' incorporates:
    *  Logic: '<S12>/Logical Operator1'
    *  RelationalOperator: '<S12>/Relational Operator2'
    */
-  QS_InnerRateLoop_Y.ScoreDisplay = (rtb_RelationalOperator_b1 && (rtb_Gain2 <=
+  QS_InnerRateLoop_Y.ScoreDisplay = (rtb_RelationalOperator_k && (rtb_Gain2 <=
     QS_InnerRateLoop_ConstB.Sum2));
 
   /* Outport: '<Root>/ScoreOn' incorporates:
    *  Logic: '<S12>/Logical Operator'
    *  RelationalOperator: '<S12>/Relational Operator1'
    */
-  QS_InnerRateLoop_Y.ScoreOn = (rtb_RelationalOperator_b1 && (rtb_Gain2 <=
+  QS_InnerRateLoop_Y.ScoreOn = (rtb_RelationalOperator_k && (rtb_Gain2 <=
     QS_InnerRateLoop_ConstB.Sum1));
 
   /* Outport: '<Root>/Vdown_corr' */
-  QS_InnerRateLoop_Y.Vdown_corr = rtb_Saturation2_h;
+  QS_InnerRateLoop_Y.Vdown_corr = rtb_DiscreteTimeIntegrator_h;
 
   /* Outport: '<Root>/Veast_corr' */
   QS_InnerRateLoop_Y.Veast_corr = rtb_Saturation1_p;
@@ -2605,19 +2679,15 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/Ax_mpss'
    *  Inport: '<Root>/Ay_mpss'
    *  Inport: '<Root>/Az_mpss'
-   *  Inport: '<Root>/theta_rad'
    *  Product: '<S7>/Divide11'
    *  Product: '<S7>/Divide12'
    *  Product: '<S7>/Divide2'
    *  Sum: '<S1>/Sum2'
    *  Sum: '<S7>/Add7'
-   *  Trigonometry: '<S7>/Trigonometric Function5'
    *  UnitDelay: '<S19>/Unit Delay'
    */
-  rtb_Sum = (((rtb_TrigonometricFunction3_tmp * rtb_Saturation_fr_tmp *
-               QS_InnerRateLoop_U.Az_mpss + rtb_TrigonometricFunction6_tmp *
-               rtb_Saturation_fr_tmp * QS_InnerRateLoop_U.Ay_mpss) +
-              -static_cast<real32_T>(sin((real_T)QS_InnerRateLoop_U.theta_rad)) *
+  rtb_Sum = (((rtb_Sum_j * QS_InnerRateLoop_U.Az_mpss + rtb_Add5_tmp *
+               QS_InnerRateLoop_U.Ay_mpss) + -rtb_Saturation1_c_tmp *
               QS_InnerRateLoop_U.Ax_mpss) + 9.81) -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_j2;
 
@@ -2626,7 +2696,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/Baro_Alt_m'
    *  UnitDelay: '<S20>/Unit Delay'
    */
-  rtb_Saturation1_p = -QS_InnerRateLoop_U.Baro_Alt_m -
+  rtb_Sum_j = -QS_InnerRateLoop_U.Baro_Alt_m -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_da;
 
   /* Sum: '<S21>/Sum' incorporates:
@@ -2634,7 +2704,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/Baro_Alt_m'
    *  UnitDelay: '<S21>/Unit Delay'
    */
-  rtb_Saturation_h = -QS_InnerRateLoop_U.Baro_Alt_m -
+  rtb_Sum_nx = -QS_InnerRateLoop_U.Baro_Alt_m -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_ag;
 
   /* DiscreteIntegrator: '<S21>/Discrete-Time Integrator' incorporates:
@@ -2661,7 +2731,8 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cg = 0.0F;
   }
 
-  rtb_Saturation2_h = QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cg;
+  rtb_DiscreteTimeIntegrator_h =
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cg;
 
   /* Outport: '<Root>/CF_Alt' incorporates:
    *  DiscreteIntegrator: '<S21>/Discrete-Time Integrator'
@@ -2693,7 +2764,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Gain: '<Root>/Gain'
    *  Inport: '<Root>/Baro_Alt_m'
    */
-  rtb_Product_ee = -QS_InnerRateLoop_U.Baro_Alt_m -
+  rtb_Saturation_h = -QS_InnerRateLoop_U.Baro_Alt_m -
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o3;
 
   /* Sum: '<S18>/Sum3' incorporates:
@@ -2702,19 +2773,20 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S18>/Unit Delay'
    *  UnitDelay: '<S18>/Unit Delay1'
    */
-  rtb_Gain2 = (rtb_Product_ee - QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a1) *
-    1.41442716F - QS_InnerRateLoop_DW.UnitDelay_DSTATE_ak;
+  rtb_Saturation1_p = (rtb_Saturation_h -
+                       QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a1) * 1.41442716F -
+    QS_InnerRateLoop_DW.UnitDelay_DSTATE_ak;
 
   /* DiscreteIntegrator: '<S18>/Discrete-Time Integrator1' incorporates:
    *  Inport: '<Root>/engage'
    */
   if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LO_e != 0) {
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_g = rtb_Product_ee;
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_g = rtb_Saturation_h;
   }
 
   if (QS_InnerRateLoop_U.engage &&
       (QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_Prev_gs <= 0)) {
-    QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_g = rtb_Product_ee;
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_g = rtb_Saturation_h;
   }
 
   /* DiscreteIntegrator: '<S19>/Discrete-Time Integrator' incorporates:
@@ -2763,27 +2835,26 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/input_ped'
    */
   if (QS_InnerRateLoop_U.input_ped > 0.05F) {
-    tmp = QS_InnerRateLoop_U.input_ped - 0.05F;
+    rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_ped - 0.05F;
   } else if (QS_InnerRateLoop_U.input_ped >= -0.05F) {
-    tmp = 0.0F;
+    rtb_Sum1_j_idx_0 = 0.0F;
   } else {
-    tmp = QS_InnerRateLoop_U.input_ped - -0.05F;
+    rtb_Sum1_j_idx_0 = QS_InnerRateLoop_U.input_ped - -0.05F;
   }
 
-  /* End of DeadZone: '<S13>/Dead Zone3' */
-
   /* Sum: '<S105>/Sum' incorporates:
+   *  DeadZone: '<S13>/Dead Zone3'
    *  Gain: '<S13>/rcmd'
    *  UnitDelay: '<S105>/Unit Delay'
    */
-  rtb_Product_ee = 3.14136124F * tmp - QS_InnerRateLoop_DW.UnitDelay_DSTATE_k;
+  rtb_Saturation_h = 3.14136124F * rtb_Sum1_j_idx_0 -
+    QS_InnerRateLoop_DW.UnitDelay_DSTATE_k;
 
   /* DiscreteIntegrator: '<S105>/Discrete-Time Integrator' incorporates:
    *  Inport: '<Root>/engage'
    */
   if ((QS_InnerRateLoop_U.engage &&
-       (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bv <= 0)) ||
-      ((!QS_InnerRateLoop_U.engage) &&
+       (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bv <= 0)) || (tmp_0 &&
        (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bv == 1))) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gy = 0.0F;
   }
@@ -2809,40 +2880,50 @@ void QS_InnerRateLoopModelClass::step()
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRese = static_cast<int8_T>
     (rtb_Compare_m);
 
-  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator' */
+  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOADI = 0U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_m += 0.0025F *
-    rtb_Sum1_j_idx_0;
+    rtb_Sum1_j_idx_1;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_a = static_cast<int8_T>
     (rtb_Compare_m);
 
-  /* Update for DiscreteIntegrator: '<S91>/Discrete-Time Integrator' */
+  /* Update for DiscreteIntegrator: '<S91>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_h += 0.0025F *
     rtb_Product_ng;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_o = static_cast<int8_T>
     (rtb_Compare_m);
 
-  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator1' */
+  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator1' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LOAD = 0U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTATE += 0.0025F *
-    rtb_Sum1_j_idx_1;
+    rtb_Sum1_j_idx_2;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevRes = static_cast<int8_T>
     (rtb_Compare_m);
 
-  /* Update for DiscreteIntegrator: '<S88>/Discrete-Time Integrator' */
+  /* Update for DiscreteIntegrator: '<S88>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_c += 0.0025F *
     rtb_Saturation8;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_b = static_cast<int8_T>
     (rtb_Compare_m);
 
-  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator2' */
+  /* Update for DiscreteIntegrator: '<S69>/Discrete-Time Integrator2' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_IC_LOAD = 0U;
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_DSTATE += 0.0025F * rtb_Add7_d;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_DSTATE += 0.0025F * rtb_Add7_f2;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_PrevRes = static_cast<int8_T>
     (rtb_Compare_m);
 
   /* Update for UnitDelay: '<S12>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE = rtb_Product2;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE = rtb_TrigonometricFunction3;
 
   /* Update for UnitDelay: '<S108>/Unit Delay1' */
   QS_InnerRateLoop_DW.UnitDelay1_DSTATE = rtb_Sum_j3;
@@ -2881,7 +2962,8 @@ void QS_InnerRateLoopModelClass::step()
     0.0025F;
 
   /* Update for DiscreteIntegrator: '<S46>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_o += rtb_Compare_k * 0.0025F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_o +=
+    rtb_derivativecutofffrequency_p * 0.0025F;
 
   /* Update for DiscreteIntegrator: '<S48>/Discrete-Time Integrator1' incorporates:
    *  DiscreteIntegrator: '<S48>/Discrete-Time Integrator'
@@ -2904,7 +2986,7 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mr) * 100.0F * 0.0025F;
 
   /* Update for Delay: '<S13>/Delay' */
-  QS_InnerRateLoop_DW.icLoad = 0U;
+  QS_InnerRateLoop_DW.icLoad = false;
   QS_InnerRateLoop_DW.Delay_DSTATE = rtb_uDLookupTable3;
 
   /* Update for Delay: '<S13>/Delay1' */
@@ -2913,6 +2995,7 @@ void QS_InnerRateLoopModelClass::step()
 
   /* Update for DiscreteIntegrator: '<S13>/Discrete-Time Integrator' incorporates:
    *  DiscreteIntegrator: '<S105>/Discrete-Time Integrator'
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_b = 0U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mz += 0.0025F *
@@ -2930,14 +3013,11 @@ void QS_InnerRateLoopModelClass::step()
   /* Update for DiscreteIntegrator: '<S40>/Discrete-Time Integrator' incorporates:
    *  Inport: '<Root>/engage'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f += 0.0025F *
-    rtb_Product_ib;
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f >= 0.1F) {
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f += 0.0025F * rtb_Product_o;
+  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f > 0.1F) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = 0.1F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f <= -0.1F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = -0.1F;
-    }
+  } else if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f < -0.1F) {
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = -0.1F;
   }
 
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_m = static_cast<int8_T>
@@ -2949,7 +3029,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_fs += 0.0025F *
-    rtb_Product_of;
+    rtb_Product_dc;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_n = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -2971,7 +3051,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o2 += 0.0025F *
-    rtb_Product_jr;
+    rtb_Product_ke;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_e = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -2983,13 +3063,13 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S34>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_bw += ((rtb_uDLookupTable1_p
-    - rtb_uDLookupTable) * rtb_Sum1_fe / rtb_uDLookupTable1_p -
+    - rtb_uDLookupTable) * rtb_Sum1_l4 / rtb_uDLookupTable1_p -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_b) * rtb_uDLookupTable * 0.0025F;
 
   /* Update for DiscreteIntegrator: '<S49>/Discrete-Time Integrator' incorporates:
    *  Inport: '<Root>/engage'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j += 0.0025F * rtb_Product_n;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j += 0.0025F * rtb_Product_p;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_d = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -2998,19 +3078,19 @@ void QS_InnerRateLoopModelClass::step()
    *  Sum: '<S50>/Sum'
    *  UnitDelay: '<S50>/Unit Delay'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_di += (rtb_Sum1_gg -
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_di += (rtb_Sum1_b -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_eo) * rtb_Saturation_k * 0.0025F;
 
   /* Update for DiscreteIntegrator: '<S60>/Discrete-Time Integrator' incorporates:
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_l += 0.0025F *
-    rtb_Product_ear;
+    rtb_Product_jw;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_j = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
   /* Update for DiscreteIntegrator: '<S61>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hv += 0.0025F * rtb_Sum1_lq;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hv += 0.0025F * rtb_Sum1_al;
 
   /* Update for DiscreteIntegrator: '<S65>/Discrete-Time Integrator' incorporates:
    *  Gain: '<S65>/Gain1'
@@ -3019,7 +3099,7 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S65>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_co += (-5.66666651F *
-    rtb_Product_hg[0] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_f) * 100.0F *
+    rtb_Product_j[0] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_f) * 100.0F *
     0.0025F;
 
   /* Update for DiscreteIntegrator: '<S66>/Discrete-Time Integrator' incorporates:
@@ -3029,7 +3109,7 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S66>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_i += (-5.66666651F *
-    rtb_Product_hg[1] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_av) * 100.0F *
+    rtb_Product_j[1] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_av) * 100.0F *
     0.0025F;
 
   /* Update for DiscreteIntegrator: '<S67>/Discrete-Time Integrator' incorporates:
@@ -3039,7 +3119,7 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S67>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_ch += (-5.66666651F *
-    rtb_Product_hg[2] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_d) * 100.0F *
+    rtb_Product_j[2] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_d) * 100.0F *
     0.0025F;
 
   /* Update for DiscreteIntegrator: '<S68>/Discrete-Time Integrator' incorporates:
@@ -3049,20 +3129,19 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S68>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_a5 += (0.636F *
-    rtb_Product_hg[3] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_e) * 5.46F *
-    0.0025F;
+    rtb_Product_j[3] - QS_InnerRateLoop_DW.UnitDelay_DSTATE_e) * 5.46F * 0.0025F;
 
   /* Update for UnitDelay: '<S65>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_f = rtb_DiscreteTimeIntegrator_fi;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_f = rtb_Add5;
 
   /* Update for UnitDelay: '<S66>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_av = rtb_DiscreteTimeIntegrator_k1;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_av = rtb_Add6;
 
   /* Update for UnitDelay: '<S67>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_d = rtb_DiscreteTimeIntegrator_h;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_d = rtb_Add7;
 
   /* Update for UnitDelay: '<S68>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_e = rtb_DiscreteTimeIntegrator_n;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_e = rtb_DiscreteTimeIntegrator_jt;
 
   /* Update for UnitDelay: '<S61>/Unit Delay' */
   QS_InnerRateLoop_DW.UnitDelay_DSTATE_o = rtb_DiscreteTimeIntegrator_ia;
@@ -3076,15 +3155,16 @@ void QS_InnerRateLoopModelClass::step()
   /* Update for UnitDelay: '<S41>/Unit Delay' */
   QS_InnerRateLoop_DW.UnitDelay_DSTATE_h = rtb_DiscreteTimeIntegrator_hs;
 
-  /* Update for DiscreteIntegrator: '<S84>/Discrete-Time Integrator' */
+  /* Update for DiscreteIntegrator: '<S84>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n += 0.0025F *
-    rtb_Sum1_j_idx_2;
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n >= 0.0174520072F) {
+    rtb_Sum1_j_idx_3;
+  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n > 0.0174520072F) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = 0.0174520072F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n <= -0.0174520072F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = -0.0174520072F;
-    }
+  } else if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n <
+             -0.0174520072F) {
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = -0.0174520072F;
   }
 
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_h = static_cast<int8_T>
@@ -3096,7 +3176,7 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S85>/Product'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_g += rtb_Abs_k *
-    rtb_Product_cw * 0.0025F;
+    rtb_Product_h * 0.0025F;
 
   /* Update for UnitDelay: '<S106>/Unit Delay2' */
   QS_InnerRateLoop_DW.UnitDelay2_DSTATE_k = rtb_Sum4_a;
@@ -3108,7 +3188,7 @@ void QS_InnerRateLoopModelClass::step()
   QS_InnerRateLoop_DW.UnitDelay_DSTATE_e2 = rtb_Compare_m;
 
   /* Update for UnitDelay: '<S48>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_c = rtb_Sum3_f;
+  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_c = rtb_Sum3_h1;
 
   /* Update for UnitDelay: '<S48>/Unit Delay' incorporates:
    *  DiscreteIntegrator: '<S48>/Discrete-Time Integrator'
@@ -3116,15 +3196,15 @@ void QS_InnerRateLoopModelClass::step()
   QS_InnerRateLoop_DW.UnitDelay_DSTATE_j =
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nq;
 
-  /* Update for DiscreteIntegrator: '<S80>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf += 0.0025F *
-    rtb_TrigonometricFunction6;
-  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf >= 0.0174520072F) {
+  /* Update for DiscreteIntegrator: '<S80>/Discrete-Time Integrator' incorporates:
+   *  DiscreteIntegrator: '<S94>/Discrete-Time Integrator'
+   */
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf += 0.0025F * rtb_Product_b;
+  if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf > 0.0174520072F) {
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = 0.0174520072F;
-  } else {
-    if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf <= -0.0174520072F) {
-      QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = -0.0174520072F;
-    }
+  } else if (QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf <
+             -0.0174520072F) {
+    QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = -0.0174520072F;
   }
 
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_dc = static_cast<int8_T>
@@ -3140,11 +3220,11 @@ void QS_InnerRateLoopModelClass::step()
    *  UnitDelay: '<S81>/Unit Delay'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc += ((rtb_uDLookupTable1_l
-    - rtb_uDLookupTable_a) * rtb_Sum1_gw / rtb_uDLookupTable1_l -
+    - rtb_uDLookupTable_a) * rtb_Sum1_me / rtb_uDLookupTable1_l -
     QS_InnerRateLoop_DW.UnitDelay_DSTATE_gi) * rtb_uDLookupTable_a * 0.0025F;
 
   /* Update for UnitDelay: '<S107>/Unit Delay2' */
-  QS_InnerRateLoop_DW.UnitDelay2_DSTATE_a = rtb_TrigonometricFunction3;
+  QS_InnerRateLoop_DW.UnitDelay2_DSTATE_a = rtb_Add6_i;
 
   /* Update for UnitDelay: '<S107>/Unit Delay1' */
   QS_InnerRateLoop_DW.UnitDelay1_DSTATE_fj = rtb_Gain1;
@@ -3162,7 +3242,7 @@ void QS_InnerRateLoopModelClass::step()
     QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_dn;
 
   /* Update for UnitDelay: '<S81>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_gi = rtb_Add6_i;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_gi = rtb_DiscreteTimeIntegrator_n;
 
   /* Update for UnitDelay: '<S85>/Unit Delay' */
   QS_InnerRateLoop_DW.UnitDelay_DSTATE_oc = rtb_Add5_e;
@@ -3190,8 +3270,8 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_j = 0U;
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_e += 0.5F * rtb_Saturation_h
-    * 0.0025F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_e += 0.5F * rtb_Sum_nx *
+    0.0025F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_l = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -3211,8 +3291,8 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_m = 0U;
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o3 += 0.5F *
-    rtb_Saturation1_p * 0.0025F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o3 += 0.5F * rtb_Sum_j *
+    0.0025F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_hn = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -3243,19 +3323,19 @@ void QS_InnerRateLoopModelClass::step()
    *  Inport: '<Root>/engage'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nv += static_cast<real32_T>
-    ((0.5 * rtb_Sum * 0.0025));
+    (0.5 * rtb_Sum * 0.0025);
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_pr = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
   /* Update for UnitDelay: '<S22>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_o1 = rtb_Saturation2_h;
+  QS_InnerRateLoop_DW.UnitDelay_DSTATE_o1 = rtb_DiscreteTimeIntegrator_h;
 
   /* Update for DiscreteIntegrator: '<S18>/Discrete-Time Integrator' incorporates:
    *  Gain: '<S18>/Gain'
    *  Inport: '<Root>/engage'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gh += 2.828F * rtb_Gain2 *
-    0.0025F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gh += 2.828F *
+    rtb_Saturation1_p * 0.0025F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_lm = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -3265,15 +3345,14 @@ void QS_InnerRateLoopModelClass::step()
    *  Product: '<S36>/Product'
    */
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_dn += intrp1d_fu32fl_pw(bpIdx,
-    rtb_Abs_i, QS_InnerRateLoop_ConstP.uDLookupTable2_tableData_l) * rtb_Add6_a *
-    0.0025F;
+    rtb_Abs_i, QS_InnerRateLoop_ConstP.pooled41) * rtb_Add6_m * 0.0025F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_f = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
   /* Update for DiscreteIntegrator: '<S48>/Discrete-Time Integrator' incorporates:
    *  Inport: '<Root>/engage'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nq += 0.0025F * rtb_Add5_ky;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nq += 0.0025F * rtb_Add5_l;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_f0 = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 
@@ -3287,357 +3366,132 @@ void QS_InnerRateLoopModelClass::step()
    *  Gain: '<S105>/Gain'
    *  Inport: '<Root>/engage'
    */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gy += 10.0F * rtb_Product_ee *
-    0.0025F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gy += 10.0F *
+    rtb_Saturation_h * 0.0025F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bv = static_cast<int8_T>
     (QS_InnerRateLoop_U.engage);
 }
 
 /* Model initialize function */
-void QS_InnerRateLoopModelClass::initialize()
+void QS_InnerRateLoop::initialize()
 {
-  /* Registration code */
-
-  /* initialize error status */
-  rtmSetErrorStatus((&QS_InnerRateLoop_M), (NULL));
-
-  /* block I/O */
-  (void) memset(((void *) &QS_InnerRateLoop_B), 0,
-                sizeof(B_QS_InnerRateLoop_T));
-
-  /* states (dwork) */
-  (void) memset((void *)&QS_InnerRateLoop_DW, 0,
-                sizeof(DW_QS_InnerRateLoop_T));
-
-  /* external inputs */
-  (void)memset(&QS_InnerRateLoop_U, 0, sizeof(ExtU_QS_InnerRateLoop_T));
-
-  /* external outputs */
-  (void) memset((void *)&QS_InnerRateLoop_Y, 0,
-                sizeof(ExtY_QS_InnerRateLoop_T));
-
-  /* InitializeConditions for Delay: '<S96>/Delay1' */
-  QS_InnerRateLoop_DW.Delay1_DSTATE = false;
-
-  /* InitializeConditions for Delay: '<S96>/Delay2' */
-  QS_InnerRateLoop_DW.Delay2_DSTATE = 0.0;
-
   /* InitializeConditions for DiscreteIntegrator: '<S94>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_a = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRese = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S69>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOADI = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_a = 2;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOADI = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S91>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_h = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_o = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S69>/Discrete-Time Integrator1' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LOAD = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevRes = 2;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LOAD = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S88>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_c = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_b = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S69>/Discrete-Time Integrator2' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_IC_LOAD = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_PrevRes = 2;
-
-  /* InitializeConditions for UnitDelay: '<S12>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S108>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S108>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_ax = false;
-
-  /* InitializeConditions for UnitDelay: '<S108>/Unit Delay2' */
-  QS_InnerRateLoop_DW.UnitDelay2_DSTATE = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S39>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_a = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S31>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hq = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S30>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_b = 0.0F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator2_IC_LOAD = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S32>/Discrete-Time Integrator1' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_o = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevR_g = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S47>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mk = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S46>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_o = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S48>/Discrete-Time Integrator1' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_DSTAT_m = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_PrevR_j = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S57>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_d = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S58>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_mr = 0.0F;
-
-  /* InitializeConditions for RateLimiter: '<S12>/Rate Limiter' */
-  QS_InnerRateLoop_DW.PrevY = 0.0F;
-
   /* InitializeConditions for Delay: '<S13>/Delay' */
-  QS_InnerRateLoop_DW.icLoad = 1U;
-
-  /* InitializeConditions for Delay: '<S13>/Delay1' */
-  QS_InnerRateLoop_DW.Delay1_DSTATE_j[0] = false;
-  QS_InnerRateLoop_DW.Delay1_DSTATE_j[1] = false;
+  QS_InnerRateLoop_DW.icLoad = true;
 
   /* InitializeConditions for DiscreteIntegrator: '<S13>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_b = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_p = 2;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_b = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S59>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE = 0.0;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bp = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S40>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_f = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_m = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S39>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_fs = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_n = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S41>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_c4 = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_by = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S33>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_o2 = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_e = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S34>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_bw = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S49>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_j = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_d = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S50>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_di = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S60>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_l = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_j = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S61>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_hv = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S65>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_co = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S66>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_i = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S67>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_ch = 0.0F;
-
-  /* InitializeConditions for DiscreteIntegrator: '<S68>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_a5 = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S65>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_f = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S66>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_av = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S67>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_d = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S68>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_e = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S61>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_o = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S50>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_eo = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S34>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_b = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S41>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_h = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S84>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_n = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_h = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S85>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTATE_g = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S106>/Unit Delay2' */
-  QS_InnerRateLoop_DW.UnitDelay2_DSTATE_k = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S106>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_f = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S106>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_e2 = false;
-
-  /* InitializeConditions for UnitDelay: '<S48>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_c = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S48>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_j = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S80>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cf = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_dc = 2;
 
-  /* InitializeConditions for DiscreteIntegrator: '<S81>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cc = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S107>/Unit Delay2' */
-  QS_InnerRateLoop_DW.UnitDelay2_DSTATE_a = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S107>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_fj = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S107>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_j1 = false;
-
-  /* InitializeConditions for UnitDelay: '<S32>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S32>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_g = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S81>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_gi = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S85>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_oc = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S19>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_j2 = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S20>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_da = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S21>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_ag = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S21>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_j = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_l = 2;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_j = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S22>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_cg = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_em = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S20>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_m = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_hn = 2;
-
-  /* InitializeConditions for UnitDelay: '<S18>/Unit Delay1' */
-  QS_InnerRateLoop_DW.UnitDelay1_DSTATE_a1 = 0.0F;
-
-  /* InitializeConditions for UnitDelay: '<S18>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_ak = 0.0F;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_IC_LOA_m = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S18>/Discrete-Time Integrator1' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LO_e = 1U;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_Prev_gs = 2;
+  QS_InnerRateLoop_DW.DiscreteTimeIntegrator1_IC_LO_e = 1U;
 
   /* InitializeConditions for DiscreteIntegrator: '<S19>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nv = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_pr = 2;
 
-  /* InitializeConditions for UnitDelay: '<S22>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_o1 = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S18>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gh = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_lm = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S32>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_dn = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevRe_f = 2;
 
   /* InitializeConditions for DiscreteIntegrator: '<S48>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_nq = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_f0 = 2;
 
-  /* InitializeConditions for UnitDelay: '<S105>/Unit Delay' */
-  QS_InnerRateLoop_DW.UnitDelay_DSTATE_k = 0.0F;
-
   /* InitializeConditions for DiscreteIntegrator: '<S105>/Discrete-Time Integrator' */
-  QS_InnerRateLoop_DW.DiscreteTimeIntegrator_DSTAT_gy = 0.0F;
   QS_InnerRateLoop_DW.DiscreteTimeIntegrator_PrevR_bv = 2;
-
-  /* SystemInitialize for Enabled SubSystem: '<S11>/Enabled Subsystem1' */
-  /* SystemInitialize for Outport: '<S98>/lon_engaged' */
-  QS_InnerRateLoop_B.lon = 0.0F;
-
-  /* SystemInitialize for Outport: '<S98>/lat_engaged' */
-  QS_InnerRateLoop_B.lat = 0.0F;
-
-  /* SystemInitialize for Outport: '<S98>/col_engaged' */
-  QS_InnerRateLoop_B.col_h = 0.0F;
-
-  /* SystemInitialize for Outport: '<S98>/ped_engaged' */
-  QS_InnerRateLoop_B.ped = 0.0F;
-
-  /* End of SystemInitialize for SubSystem: '<S11>/Enabled Subsystem1' */
-
-  /* SystemInitialize for Enabled SubSystem: '<S13>/Enabled Subsystem1' */
-  /* SystemInitialize for Outport: '<S104>/col_engaged' */
-  QS_InnerRateLoop_B.col = 0.0F;
-
-  /* End of SystemInitialize for SubSystem: '<S13>/Enabled Subsystem1' */
-
-  /* SystemInitialize for Enabled SubSystem: '<Root>/Determine Heading at Start of Manuever  All trajectories relative to this heading' */
-  /* SystemInitialize for Outport: '<S4>/psi_engaged (deg)' */
-  QS_InnerRateLoop_B.Gain = 0.0F;
-
-  /* End of SystemInitialize for SubSystem: '<Root>/Determine Heading at Start of Manuever  All trajectories relative to this heading' */
-
-  /* SystemInitialize for Enabled SubSystem: '<Root>/Enabled Subsystem Grab and Freeze Value Upon Engagement' */
-  /* SystemInitialize for Outport: '<S6>/Out1' */
-  QS_InnerRateLoop_B.In1[0] = 0.0F;
-  QS_InnerRateLoop_B.In1[1] = 0.0F;
-  QS_InnerRateLoop_B.In1[2] = 0.0F;
-  QS_InnerRateLoop_B.In1[3] = 0.0F;
-
-  /* End of SystemInitialize for SubSystem: '<Root>/Enabled Subsystem Grab and Freeze Value Upon Engagement' */
 }
 
 /* Model terminate function */
-void QS_InnerRateLoopModelClass::terminate()
+void QS_InnerRateLoop::terminate()
 {
   /* (no terminate code required) */
 }
 
 /* Constructor */
-QS_InnerRateLoopModelClass::QS_InnerRateLoopModelClass()
+QS_InnerRateLoop::QS_InnerRateLoop() :
+  QS_InnerRateLoop_U(),
+  QS_InnerRateLoop_Y(),
+  QS_InnerRateLoop_B(),
+  QS_InnerRateLoop_DW(),
+  QS_InnerRateLoop_M()
 {
   /* Currently there is no constructor body generated.*/
 }
 
 /* Destructor */
-QS_InnerRateLoopModelClass::~QS_InnerRateLoopModelClass()
+QS_InnerRateLoop::~QS_InnerRateLoop()
 {
   /* Currently there is no destructor body generated.*/
 }
 
 /* Real-Time Model get method */
-RT_MODEL_QS_InnerRateLoop_T * QS_InnerRateLoopModelClass::getRTM()
+RT_MODEL_QS_InnerRateLoop_T * QS_InnerRateLoop::getRTM()
 {
   return (&QS_InnerRateLoop_M);
 }
