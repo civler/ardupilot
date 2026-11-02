@@ -678,4 +678,44 @@ AP_OSD *AP::osd() {
     return AP_OSD::get_singleton();
 }
 
+
 #endif // OSD_ENABLED || OSD_PARAM_ENABLED
+
+#if OSD_ENABLED
+// Added 06/10/2026 to allow scripting access to OSD
+void AP_OSD::scripting_clear() {
+    WITH_SEMAPHORE(_lua_sem);
+    //_lua_items[0] = {};
+    _lua_item_count = 0;
+    
+}
+
+void AP_OSD::scripting_write(uint8_t index,uint8_t x, uint8_t y, const char* text) {
+    
+    WITH_SEMAPHORE(_lua_sem);
+    if (index < 40) {
+        _lua_buffer[index].x = x;
+        _lua_buffer[index].y = y;
+        strncpy(_lua_buffer[index].text, text, sizeof(_lua_buffer[0].text)-1);
+        _lua_buffer[index].text[sizeof(_lua_buffer[0].text) - 1] = '\0';
+        if (index >= _lua_buffer_count) {
+            _lua_buffer_count = index + 1;
+        }
+    }
+}
+
+void AP_OSD::scripting_commit()
+{
+    WITH_SEMAPHORE(_lua_sem);
+
+    if (_lua_buffer_count > 0)
+    {
+        memcpy(_lua_items, _lua_buffer, _lua_buffer_count * sizeof(LuaOSDItem));
+    }
+
+    _lua_item_count = _lua_buffer_count;
+    _lua_buffer_count = 0;
+}
+
+#endif
+// ---------------------------------------------------
